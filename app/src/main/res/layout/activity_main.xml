@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.auth.MainActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_marginTop="@dimen/_60sdp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:srcCompat="@drawable/girl_offers_illustration" />
+
+            <TextView
+                android:id="@+id/explore_your_books_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:text="Rent Your Favourite Books"
+                android:fontFamily="@font/binoma_trial_bold"
+                android:textColor="@color/main_text_color"
+                android:textSize="@dimen/_20sdp"
+                android:letterSpacing="0.02"/>
+
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Embark on Your Literary Journey with Ease"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_13ssp"
+                android:fontFamily="@font/revolin_thin" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_60sdp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/signup_button"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:hint="Sign Up"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    app:backgroundTint="@color/light_green"
+                    app:cornerRadius="@dimen/_15ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/outlined_TextField_passwordConfirm" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/login_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_20ssp"
+                    android:fontFamily="@font/lato_bold"
+                    android:hint="Log in"
+                    android:textColorHint="@color/main_text_color"
+                    android:textSize="@dimen/_13ssp"
+                    app:cornerRadius="@dimen/_15ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:strokeColor="@color/light_green"
+                    app:strokeWidth="@dimen/_3ssp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

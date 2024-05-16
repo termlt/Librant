@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:orientation="vertical">
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please Fill Out Details About You"
+            android:textColor="#5FBA4F"
+            android:fontFamily="@font/source_sans_pro_bold"
+            android:textAlignment="center"
+            android:textSize="@dimen/_16ssp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/proceedButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:backgroundTint="#2EEFEDED"
+            android:text="Proceed"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="#4FBC53"
+            app:strokeColor="@color/light_green"
+            app:rippleColor="@color/light_gray"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Librant</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="age_limits">
+        <item>6+</item>
+        <item>12+</item>
+        <item>16+</item>
+        <item>18+</item>
+    </string-array>
+
+    <string-array name="availability_options">
+        <item>Available</item>
+        <item>Unavailable</item>
+        <item>Hidden</item>
+    </string-array>
+</resources>

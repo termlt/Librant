@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/back_button"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@drawable/arrow_left_black"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/bookAddedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:text="Book Added Successfully!"
+                android:textSize="@dimen/_20ssp"
+                android:fontFamily="@font/source_sans_pro_bold"
+                android:textColor="#4DC84D"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/bookAddedDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:ems="9"
+                android:text=" Please Wait For It To Be Approved By Moderators"
+                android:textSize="@dimen/_13ssp"
+                android:fontFamily="@font/open_sans_semibold"
+                android:textColor="@color/gray"
+                app:layout_constraintTop_toBottomOf="@id/bookAddedText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/illustration"
+                android:layout_width="@dimen/_180sdp"
+                android:layout_height="@dimen/_180sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:src="@drawable/verified_illustration"
+                app:layout_constraintTop_toBottomOf="@id/bookAddedDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/backHomeButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backHomeButton"
+                style="?attr/materialButtonStyle"
+                android:layout_width="@dimen/_270sdp"
+                android:layout_height="@dimen/_55sdp"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:hint="Back to Home"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:cornerRadius="@dimen/_25sdp"
+                app:backgroundTint="@color/light_green"
+                app:layout_constraintTop_toBottomOf="@id/illustration"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

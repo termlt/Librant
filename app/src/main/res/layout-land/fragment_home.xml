@@ -41,8 +41,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/_14sdp"
                                 android:layout_gravity="start"
-                                android:src="@drawable/notifications_icon"
-                                android:visibility="gone" />
+                                android:src="@drawable/notifications_icon" />
 
                             <TextView
                                 android:id="@+id/appName"
@@ -52,7 +51,7 @@
                                 android:text="Librant"
                                 android:textColor="@color/main_text_color"
                                 android:fontFamily="@font/kelson_sans_bold"
-                                android:textSize="@dimen/_16ssp"
+                                android:textSize="@dimen/_14ssp"
                                 android:textStyle="bold" />
 
                             <ImageView

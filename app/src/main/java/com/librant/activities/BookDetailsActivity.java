@@ -37,6 +37,8 @@ import com.librant.models.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,7 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private List<String> savedBooks;
     private Book book;
     private User bookOwner;
-    private MaterialButton buttonDirection, buttonInformation, buttonContactOwner;
+    private MaterialButton buttonDirection, buttonContactOwner;
     private String bookOwnerLocation;
     private ImageView saveButton, historyButton, approveButton, disproveButton, backButton;
     private ActivityBookDetailsBinding binding;
@@ -90,7 +92,6 @@ public class BookDetailsActivity extends AppCompatActivity {
         disproveButton = binding.disproveButton;
         saveButton = binding.saveButton;
         backButton = binding.backButton;
-        buttonInformation = binding.buttonInformation;
         buttonDirection = binding.buttonDirection;
         buttonContactOwner = binding.buttonContactOwner;
 
@@ -98,8 +99,25 @@ public class BookDetailsActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(view -> finish());
         saveButton.setOnClickListener(v -> handleSaveButtonClick());
-        buttonDirection.setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class).putExtra("ownerLocation", bookOwnerLocation)));
-        buttonInformation.setOnClickListener(v -> displayOwnerInfo());
+        buttonDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!bookOwner.isAddressVisible()) {
+                    Snackbar.make(v, "This book owner does not have an address", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    userCollection.getUserById(mAuth.getCurrentUser().getUid(), user -> {
+                        String currentUserAddress = user.getAddress();
+                        if (currentUserAddress == null || currentUserAddress.isEmpty()) {
+                            Snackbar.make(v, "You don't have your address specified", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(new Intent(BookDetailsActivity.this, MapActivity.class)
+                                    .putExtra("ownerLocation", bookOwnerLocation));
+                        }
+                    });
+                }
+            }
+        });
+
         buttonContactOwner.setOnClickListener(v -> displayOwnerInfo());
 
         fetchUserSavedBooks(saveButton);
@@ -116,13 +134,49 @@ public class BookDetailsActivity extends AppCompatActivity {
                 historyButton.setVisibility(View.VISIBLE);
 
                 historyButton.setOnClickListener(v -> {
-                    BookOwnerHistoryFragment fragment = new BookOwnerHistoryFragment("What is Lorem Ipsum?\n" +
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+                    String borrowerHistory = formatBorrowerHistory(book.getBorrowers());
+                    BookOwnerHistoryFragment fragment = BookOwnerHistoryFragment.newInstance(borrowerHistory);
                     fragment.show(getSupportFragmentManager(), fragment.getTag());
                 });
             }
         });
     }
+
+
+    private String formatBorrowerHistory(List<String> borrowers) {
+        if (borrowers == null || borrowers.isEmpty()) {
+            return "No borrower history available.";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        List<String[]> borrowerPartsList = new ArrayList<>();
+
+        for (String borrower : borrowers) {
+            String[] parts = borrower.split(" ");
+            if (parts.length >= 3) {
+                String name = parts[0];
+                String surname = parts[1];
+                String dateString = borrower.substring(name.length() + surname.length() + 2).trim();
+                try {
+                    Date date = sdf.parse(dateString);
+                    borrowerPartsList.add(new String[]{name, surname, dateString, String.valueOf(date.getTime())});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Collections.sort(borrowerPartsList, (b1, b2) -> Long.compare(Long.parseLong(b2[3]), Long.parseLong(b1[3])));
+
+        StringBuilder historyBuilder = new StringBuilder();
+        for (String[] parts : borrowerPartsList) {
+            historyBuilder.append("<b>Name:</b> ").append(parts[0]).append(" ").append(parts[1]).append("<br/>");
+            historyBuilder.append("<b>Borrowed Until:</b> ").append(parts[2]).append("<br/><br/>");
+        }
+
+        return historyBuilder.toString();
+    }
+
 
     private void displayOwnerInfo() {
         if (book.getAvailability().equals("Unavailable")) {
@@ -153,6 +207,14 @@ public class BookDetailsActivity extends AppCompatActivity {
         String nameText = (bookOwner.getName() != null && !bookOwner.getName().isEmpty()) ? bookOwner.getName() + " " + (bookOwner.getSurname() != null ? bookOwner.getSurname() : "") : "Unavailable";
         String phoneText = (bookOwner.getPhoneNumber() != null && !bookOwner.getPhoneNumber().isEmpty()) ? bookOwner.getPhoneNumber() : "Unavailable";
         String addressText = (bookOwner.getAddress() != null && !bookOwner.getAddress().isEmpty()) ? bookOwner.getAddress() : "Unavailable";
+
+        if (!bookOwner.isPhoneNumberVisible()) {
+            phoneText = "Unavailable";
+        }
+
+        if (!bookOwner.isAddressVisible()) {
+            addressText = "Unavailable";
+        }
 
         nameView.setText(fromHtml("<b>Name:</b> " + nameText));
         phoneView.setText(fromHtml("<b>Phone Number:</b> " + phoneText));
@@ -291,19 +353,21 @@ public class BookDetailsActivity extends AppCompatActivity {
 
             MaterialButton buttonContactOwner = findViewById(R.id.buttonContactOwner);
 
-            switch (book.getAvailability()) {
-                case "Available":
-                    buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.light_green));
-                    break;
-                case "Unavailable":
-                    buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.yellow));
-                    break;
-                case "Hidden":
-                    buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.button_gray));
-                    break;
-                default:
-                    buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.light_green));
-                    break;
+            if (book.getAvailability() != null) {
+                switch (book.getAvailability()) {
+                    case "Available":
+                        buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.light_green));
+                        break;
+                    case "Unavailable":
+                        buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.yellow));
+                        break;
+                    case "Hidden":
+                        buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.button_gray));
+                        break;
+                    default:
+                        buttonContactOwner.setBackgroundColor(getResources().getColor(R.color.light_green));
+                        break;
+                }
             }
         }
     }

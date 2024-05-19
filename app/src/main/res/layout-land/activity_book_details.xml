@@ -18,14 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonDirection"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="@dimen/_35sdp"
                 android:fontFamily="@font/open_sans_semibold"
                 android:text="Direction"
                 android:textColor="@color/button_gray"
@@ -33,16 +32,20 @@
                 app:icon="@drawable/map_icon"
                 app:iconTint="@color/button_gray"
                 app:iconSize="@dimen/_18sdp"
-                app:iconPadding="-10dp"
+                app:iconPadding="-15dp"
                 app:strokeColor="@color/button_gray"
                 app:strokeWidth="@dimen/_1sdp"
                 app:cornerRadius="@dimen/_20sdp"/>
 
+            <Space
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="wrap_content"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonContactOwner"
                 style="?attr/materialButtonStyle"
-                android:layout_width="@dimen/_250sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_210sdp"
+                android:layout_height="@dimen/_45sdp"
                 android:fontFamily="@font/open_sans_semibold"
                 android:hint="Contact Owner"
                 android:textColorHint="@color/white"
@@ -124,15 +127,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
+                android:gravity="start"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/book_cover_image"
@@ -142,28 +146,38 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/bookAuthor"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:fontFamily="@font/ubuntu_regular"
-                    android:text="Book Author"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/bookTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/bion_bold"
-                    android:text="Book Title"
-                    android:textColor="@color/main_text_color"
-                    android:textSize="@dimen/_16ssp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:ellipsize="end" />
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/bookTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:fontFamily="@font/bion_bold"
+                        android:text="Book Title"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="@dimen/_19ssp"
+                        android:ellipsize="end"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/bookAuthor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/ubuntu_regular"
+                        android:text="Book Author"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_15ssp"
+                        android:gravity="center" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -275,6 +289,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/_11sdp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintTop_toBottomOf="@id/typesLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

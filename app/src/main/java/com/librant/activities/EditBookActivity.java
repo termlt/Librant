@@ -6,29 +6,32 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.librant.R;
 import com.librant.models.Book;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class EditBookActivity extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -38,9 +41,18 @@ public class EditBookActivity extends AppCompatActivity {
     private TextInputEditText editTextDescription;
     private TextInputEditText editTextLanguage;
     private TextInputEditText editTextPageCount;
+    private TextInputEditText editTextBorrowerName;
+    private TextInputEditText editTextBorrowerSurname;
+    private TextInputLayout outlinedTextFieldBorrowerName;
+    private TextInputLayout outlinedTextFieldBorrowerSurname;
+
     private Spinner spinnerAgeLimit;
     private Spinner spinnerAvailability;
     private MaterialButton saveButton;
+    private TextView borrowerNameText;
+    private TextView borrowerSurnameText;
+    private MaterialCardView availabilityDateCard;
+    private TextView availabilityDateText;
     private Book book;
     private Date availabilityDate;
 
@@ -52,6 +64,8 @@ public class EditBookActivity extends AppCompatActivity {
     private boolean isPageCountFilled = false;
     private boolean isAgeLimitSelected = false;
     private boolean isAvailabilitySelected = false;
+    private boolean isBorrowerNameFilled = false;
+    private boolean isBorrowerSurnameFilled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +78,15 @@ public class EditBookActivity extends AppCompatActivity {
             book = (Book) getIntent().getSerializableExtra("book");
         }
 
+        initViews();
+
         LinearProgressIndicator progressIndicator = findViewById(R.id.toolbarProgress);
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 15, 30);
         progressAnimator.setDuration(400);
         progressAnimator.setInterpolator(new LinearInterpolator());
         progressAnimator.start();
 
-        saveButton = findViewById(R.id.saveButton);
         saveButton.setEnabled(false);
-
-        editTextTitle = findViewById(R.id.editTextTitle);
-        editTextAuthorName = findViewById(R.id.editTextAuthorName);
-        editTextAuthorSurname = findViewById(R.id.editTextAuthorSurname);
-        editTextDescription = findViewById(R.id.editTextDescription);
-        editTextLanguage = findViewById(R.id.editTextLanguage);
-        editTextPageCount = findViewById(R.id.editTextPageCount);
-        spinnerAgeLimit = findViewById(R.id.spinnerAgeLimit);
-        spinnerAvailability = findViewById(R.id.spinnerAvailability);
 
         ArrayAdapter<CharSequence> ageLimitAdapter = ArrayAdapter.createFromResource(this,
                 R.array.age_limits, android.R.layout.simple_spinner_item);
@@ -108,11 +114,12 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1) {
-                    showUnavailableDialog();
+                    showBorrowerInfo();
                 } else {
-                    isAvailabilitySelected = true;
-                    checkAllFields();
+                    hideBorrowerInfo();
                 }
+                isAvailabilitySelected = true;
+                checkAllFields();
             }
 
             @Override
@@ -134,6 +141,8 @@ public class EditBookActivity extends AppCompatActivity {
                 isDescriptionFilled = !editTextDescription.getText().toString().isEmpty();
                 isLanguageFilled = !editTextLanguage.getText().toString().isEmpty();
                 isPageCountFilled = !editTextPageCount.getText().toString().isEmpty();
+                isBorrowerNameFilled = !editTextBorrowerName.getText().toString().isEmpty();
+                isBorrowerSurnameFilled = !editTextBorrowerSurname.getText().toString().isEmpty();
                 checkAllFields();
             }
 
@@ -147,6 +156,8 @@ public class EditBookActivity extends AppCompatActivity {
         editTextDescription.addTextChangedListener(textWatcher);
         editTextLanguage.addTextChangedListener(textWatcher);
         editTextPageCount.addTextChangedListener(textWatcher);
+        editTextBorrowerName.addTextChangedListener(textWatcher);
+        editTextBorrowerSurname.addTextChangedListener(textWatcher);
 
         saveButton.setOnClickListener(view -> {
             if (allFieldsFilled()) {
@@ -158,8 +169,29 @@ public class EditBookActivity extends AppCompatActivity {
                 book.setPageCount(Integer.parseInt(editTextPageCount.getText().toString()));
                 book.setAgeLimit(Integer.parseInt(spinnerAgeLimit.getSelectedItem().toString().replace("+", "")));
                 book.setAvailability(spinnerAvailability.getSelectedItem().toString());
-                if (availabilityDate != null) {
-                    book.setAvailabilityDate(availabilityDate);
+
+                if (spinnerAvailability.getSelectedItem().toString().equals("Unavailable")) {
+                    book.setBorrowerName(editTextBorrowerName.getText().toString());
+                    book.setBorrowerSurname(editTextBorrowerSurname.getText().toString());
+
+                    if (availabilityDate != null) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(availabilityDate);
+                        String newBorrowerInfo = book.getBorrowerName() + " " + book.getBorrowerSurname() + " " + formattedDate;
+
+                        List<String> borrowers = book.getBorrowers();
+                        if (borrowers == null) {
+                            borrowers = new ArrayList<>();
+                            book.setBorrowers(borrowers);
+                        }
+
+                        borrowers.add(newBorrowerInfo);
+                        book.setAvailabilityDate(availabilityDate);
+                    }
+                } else {
+                    book.setBorrowerName(null);
+                    book.setBorrowerSurname(null);
+                    book.setAvailabilityDate(null);
                 }
 
                 db.collection("books").document(book.getBookId())
@@ -176,6 +208,30 @@ public class EditBookActivity extends AppCompatActivity {
         loadBookData();
     }
 
+    private void initViews() {
+        editTextTitle = findViewById(R.id.editTextTitle);
+        editTextAuthorName = findViewById(R.id.editTextAuthorName);
+        editTextAuthorSurname = findViewById(R.id.editTextAuthorSurname);
+        editTextDescription = findViewById(R.id.editTextDescription);
+        editTextLanguage = findViewById(R.id.editTextLanguage);
+        editTextPageCount = findViewById(R.id.editTextPageCount);
+        editTextBorrowerName = findViewById(R.id.editTextBorrowerName);
+        editTextBorrowerSurname = findViewById(R.id.editTextBorrowerSurname);
+        spinnerAgeLimit = findViewById(R.id.spinnerAgeLimit);
+        spinnerAvailability = findViewById(R.id.spinnerAvailability);
+        saveButton = findViewById(R.id.saveButton);
+        borrowerNameText = findViewById(R.id.borrower_name_text);
+        borrowerSurnameText = findViewById(R.id.borrower_surname_text);
+        availabilityDateCard = findViewById(R.id.availabilityDateCard);
+        availabilityDateText = findViewById(R.id.availabilityDateText);
+
+        outlinedTextFieldBorrowerName = findViewById(R.id.outlinedTextFieldBorrowerName);
+        outlinedTextFieldBorrowerSurname = findViewById(R.id.outlinedTextFieldBorrowerSurname);
+
+        availabilityDateCard.setOnClickListener(v -> showDatePicker());
+    }
+
+
     private void loadBookData() {
         if (book != null) {
             editTextTitle.setText(book.getTitle());
@@ -186,8 +242,29 @@ public class EditBookActivity extends AppCompatActivity {
             editTextPageCount.setText(String.valueOf(book.getPageCount()));
             spinnerAgeLimit.setSelection(getSpinnerIndex(spinnerAgeLimit, book.getAgeLimit() + "+"));
             spinnerAvailability.setSelection(getSpinnerIndex(spinnerAvailability, book.getAvailability()));
+
+            if (book.getAvailability().equals("Unavailable")) {
+                showBorrowerInfo();
+                editTextBorrowerName.setText(book.getBorrowerName());
+                editTextBorrowerSurname.setText(book.getBorrowerSurname());
+                isBorrowerNameFilled = true;
+                isBorrowerSurnameFilled = true;
+                if (book.getAvailabilityDate() != null) {
+                    availabilityDate = book.getAvailabilityDate();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                    availabilityDateText.setText(sdf.format(availabilityDate));
+                }
+                checkAllFields();
+            } else {
+                hideBorrowerInfo();
+            }
+
+            if (book.getBorrowers() == null) {
+                book.setBorrowers(new ArrayList<>());
+            }
         }
     }
+
 
     private int getSpinnerIndex(Spinner spinner, String value) {
         ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
@@ -205,39 +282,45 @@ public class EditBookActivity extends AppCompatActivity {
     }
 
     private boolean allFieldsFilled() {
-        return isTitleFilled && isAuthorNameFilled && isAuthorSurnameFilled && isDescriptionFilled && isLanguageFilled && isPageCountFilled && isAgeLimitSelected && isAvailabilitySelected;
+        if (spinnerAvailability.getSelectedItem().toString().equals("Unavailable")) {
+            return isTitleFilled && isAuthorNameFilled && isAuthorSurnameFilled && isDescriptionFilled && isLanguageFilled && isPageCountFilled && isAgeLimitSelected && isAvailabilitySelected && isBorrowerNameFilled && isBorrowerSurnameFilled;
+        } else {
+            return isTitleFilled && isAuthorNameFilled && isAuthorSurnameFilled && isDescriptionFilled && isLanguageFilled && isPageCountFilled && isAgeLimitSelected && isAvailabilitySelected;
+        }
     }
 
-    private void showUnavailableDialog() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_borrower_info, null);
-        TextInputEditText borrowerName = dialogView.findViewById(R.id.borrowerName);
-        TextInputEditText borrowerSurname = dialogView.findViewById(R.id.borrowerSurname);
+    private void showBorrowerInfo() {
+        editTextBorrowerName.setVisibility(View.VISIBLE);
+        editTextBorrowerSurname.setVisibility(View.VISIBLE);
+        borrowerNameText.setVisibility(View.VISIBLE);
+        borrowerSurnameText.setVisibility(View.VISIBLE);
+        availabilityDateCard.setVisibility(View.VISIBLE);
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.CustomAlertDialog)
-                .setTitle("Borrower Information")
-                .setView(dialogView)
-                .setPositiveButton("Choose Date", null)
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    dialog.dismiss();
-                    spinnerAvailability.setSelection(0);
-                });
+        outlinedTextFieldBorrowerName.setVisibility(View.VISIBLE);
+        outlinedTextFieldBorrowerSurname.setVisibility(View.VISIBLE);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        dialog.getButton(dialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (borrowerName.getText().toString().isEmpty()) {
-                borrowerName.setError("Name is required");
-            } else if (borrowerSurname.getText().toString().isEmpty()) {
-                borrowerSurname.setError("Surname is required");
-            } else {
-                dialog.dismiss();
-                showDatePicker(borrowerName.getText().toString(), borrowerSurname.getText().toString());
-            }
-        });
+        checkAllFields();
     }
 
-    private void showDatePicker(String borrowerName, String borrowerSurname) {
+
+
+    private void hideBorrowerInfo() {
+        editTextBorrowerName.setVisibility(View.GONE);
+        editTextBorrowerSurname.setVisibility(View.GONE);
+        borrowerNameText.setVisibility(View.GONE);
+        borrowerSurnameText.setVisibility(View.GONE);
+        availabilityDateCard.setVisibility(View.GONE);
+
+        outlinedTextFieldBorrowerName.setVisibility(View.GONE);
+        outlinedTextFieldBorrowerSurname.setVisibility(View.GONE);
+
+        isBorrowerNameFilled = false;
+        isBorrowerSurnameFilled = false;
+        checkAllFields();
+    }
+
+
+    private void showDatePicker() {
         CalendarConstraints constraints = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointForward.now())
                 .build();
@@ -251,16 +334,18 @@ public class EditBookActivity extends AppCompatActivity {
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
             availabilityDate = new Date(selection);
-            if (book.getBorrowers() == null) {
-                book.setBorrowers(new ArrayList<>());
-            }
-            book.getBorrowers().add(borrowerName + " " + borrowerSurname);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+            availabilityDateText.setText(sdf.format(availabilityDate));
             isAvailabilitySelected = true;
             checkAllFields();
         });
 
         datePicker.addOnNegativeButtonClickListener(dialog -> {
-            spinnerAvailability.setSelection(0);
+            if (book.getAvailability().equals("Unavailable") && availabilityDate == null) {
+                spinnerAvailability.setSelection(0);
+                hideBorrowerInfo();
+            }
         });
     }
+
 }

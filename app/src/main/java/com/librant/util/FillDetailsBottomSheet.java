@@ -1,5 +1,6 @@
 package com.librant.util;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,10 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.librant.R;
+import com.librant.activities.EditProfileActivity;
 
 public class FillDetailsBottomSheet extends BottomSheetDialogFragment {
 
@@ -33,11 +33,7 @@ public class FillDetailsBottomSheet extends BottomSheetDialogFragment {
 
     private void navigateToEditProfileFragment() {
         if (getActivity() != null) {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            //transaction.replace(R.id.fragment_container_home, new EditProfileFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
+            startActivity(new Intent(getActivity(), EditProfileActivity.class));
         }
     }
 }

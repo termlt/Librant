@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,6 +31,7 @@ public class SearchFragment extends Fragment {
     private ArrayList<Book> bookList;
     private FirebaseFirestore db;
     private ConstraintLayout booksNotFoundLayout;
+    private LinearLayout searchAnythingLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class SearchFragment extends Fragment {
         SearchBar searchBar = view.findViewById(R.id.search_bar);
         RecyclerView recyclerView = view.findViewById(R.id.book_recycler_view);
         booksNotFoundLayout = view.findViewById(R.id.booksNotFoundLayout);
+        searchAnythingLayout = view.findViewById(R.id.searchAnythingLayout);
 
         bookList = new ArrayList<>();
 
@@ -61,14 +64,12 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 searchBar.setText(v.getText());
+                searchAnythingLayout.setVisibility(View.GONE);
                 searchBooks(searchView.getText().toString(), view);
-
                 searchView.handleBackInvoked();
-
                 return true;
             }
         });
-
 
         return view;
     }
@@ -95,5 +96,4 @@ public class SearchFragment extends Fragment {
                     }
                 });
     }
-
 }

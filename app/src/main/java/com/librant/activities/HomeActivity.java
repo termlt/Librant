@@ -23,12 +23,14 @@ public class HomeActivity extends AppCompatActivity {
     private SearchFragment searchFragment;
     private SavedFragment savedFragment;
     private ProfileFragment profileFragment;
-    private Fragment activeFragment;  // Track the currently active fragment
+    private Fragment activeFragment;
+    private ActivityHomeBinding binding;
+    private static final String ACTIVE_FRAGMENT_TAG = "active_fragment_tag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -37,19 +39,37 @@ public class HomeActivity extends AppCompatActivity {
             finish();
         }
 
-        homeFragment = new HomeFragment();
-        searchFragment = new SearchFragment();
-        savedFragment = new SavedFragment();
-        profileFragment = new ProfileFragment();
+        if (savedInstanceState != null) {
+            homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("HOME");
+            searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("SEARCH");
+            savedFragment = (SavedFragment) getSupportFragmentManager().findFragmentByTag("SAVED");
+            profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentByTag("PROFILE");
+            activeFragment = getSupportFragmentManager().findFragmentByTag(savedInstanceState.getString(ACTIVE_FRAGMENT_TAG));
+        } else {
+            homeFragment = new HomeFragment();
+            searchFragment = new SearchFragment();
+            savedFragment = new SavedFragment();
+            profileFragment = new ProfileFragment();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, homeFragment, "HOME")
-                .commit();
-        activeFragment = homeFragment;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, homeFragment, "HOME")
+                    .commit();
+            activeFragment = homeFragment;
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, searchFragment, "SEARCH").hide(searchFragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, savedFragment, "SAVED").hide(savedFragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, profileFragment, "PROFILE").hide(profileFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, searchFragment, "SEARCH").hide(searchFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, savedFragment, "SAVED").hide(savedFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, profileFragment, "PROFILE").hide(profileFragment).commit();
+        }
+
+        if (activeFragment instanceof HomeFragment) {
+            binding.bottomBar.setItemActiveIndex(0);
+        } else if (activeFragment instanceof SearchFragment) {
+            binding.bottomBar.setItemActiveIndex(1);
+        } else if (activeFragment instanceof SavedFragment) {
+            binding.bottomBar.setItemActiveIndex(2);
+        } else if (activeFragment instanceof ProfileFragment) {
+            binding.bottomBar.setItemActiveIndex(3);
+        }
 
         binding.bottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
             Fragment selectedFragment = null;
@@ -70,6 +90,12 @@ public class HomeActivity extends AppCompatActivity {
             switchFragment(selectedFragment);
             return true;
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ACTIVE_FRAGMENT_TAG, activeFragment.getTag());
     }
 
     private void switchFragment(Fragment fragment) {

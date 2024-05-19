@@ -62,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_7sdp"
-                android:ems="9"
                 android:text="We need a photo of your book in a good quality."
                 android:textSize="@dimen/_13ssp"
                 android:fontFamily="@font/open_sans_semibold"

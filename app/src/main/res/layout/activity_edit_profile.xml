@@ -32,7 +32,6 @@
                 android:id="@+id/back_button"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:background="@drawable/arrow_left_black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -163,6 +162,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Show Phone Number"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:thumbTint="@color/light_green"
+            app:trackTint="#94CF92"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldPhoneNumber"/>
+
         <TextView
             android:id="@+id/addressText"
             android:layout_width="wrap_content"
@@ -174,7 +187,7 @@
             android:textColor="@color/black"
             android:fontFamily="@font/lato_bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldPhoneNumber"/>
+            app:layout_constraintTop_toBottomOf="@id/switchPhoneNumber"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextFieldAddress"
@@ -210,11 +223,24 @@
             android:layout_width="@dimen/_65sdp"
             android:layout_height="@dimen/_55sdp"
             android:layout_marginTop="@dimen/_4sdp"
-
             android:src="@drawable/baseline_autorenew_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/outlinedTextFieldAddress"
             app:layout_constraintTop_toBottomOf="@+id/addressText" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="Show Address"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:thumbTint="@color/light_green"
+            app:trackTint="#94CF92"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAddress"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonUpdate"
@@ -232,7 +258,7 @@
             app:strokeWidth="@dimen/_1sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAddress"
+            app:layout_constraintTop_toBottomOf="@id/switchAddress"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

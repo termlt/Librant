@@ -10,6 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.librant.models.User;
 
+import java.util.List;
+
 public class UserCollection {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -51,6 +53,10 @@ public class UserCollection {
                         user.setSurname((String) documentSnapshot.getData().get("surname"));
                         user.setAddress((String) documentSnapshot.getData().get("address"));
                         user.setPhoneNumber((String) documentSnapshot.getData().get("phoneNumber"));
+                        user.setSavedBooks((List<String>) documentSnapshot.getData().get("savedBooks"));
+                        user.setViewedBooks((List<String>) documentSnapshot.getData().get("viewedBooks"));
+                        user.setAddressVisible((Boolean) documentSnapshot.getData().get("addressVisible"));
+                        user.setPhoneNumberVisible((Boolean) documentSnapshot.getData().get("phoneNumberVisible"));
                     }
                 }
                 callback.onUserReceived(user);

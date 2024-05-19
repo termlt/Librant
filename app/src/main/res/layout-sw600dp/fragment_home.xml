@@ -52,7 +52,7 @@
                                 android:text="Librant"
                                 android:textColor="@color/main_text_color"
                                 android:fontFamily="@font/kelson_sans_bold"
-                                android:textSize="@dimen/_16ssp"
+                                android:textSize="@dimen/_12ssp"
                                 android:textStyle="bold" />
 
                             <ImageView

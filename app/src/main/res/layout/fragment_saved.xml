@@ -11,77 +11,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:liftOnScroll="true">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <com.google.android.material.appbar.MaterialToolbar
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize">
+                    android:layout_height="?attr/actionBarSize"
+                    app:liftOnScroll="true">
+
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Saved"
+                            android:textColor="@color/main_text_color"
+                            android:fontFamily="@font/kelson_sans_bold"
+                            android:textSize="@dimen/_16ssp"
+                            android:textStyle="bold" />
+
+                    </com.google.android.material.appbar.MaterialToolbar>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center" />
+
+                <LinearLayout
+                    android:id="@+id/noSavedBooksLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:gravity="center_horizontal">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animationView"
+                        android:layout_width="@dimen/_230sdp"
+                        android:layout_height="@dimen/_230sdp"
+                        app:lottie_url="https://lottie.host/c065ce46-8c5a-4c44-a734-2665aace839e/XCoEZnQ0m1.json"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Saved"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="No Saved Books"
                         android:textColor="@color/main_text_color"
-                        android:fontFamily="@font/kelson_sans_bold"
-                        android:textSize="@dimen/_16ssp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/_17ssp"
+                        android:fontFamily="@font/open_sans_semibold" />
 
-                </com.google.android.material.appbar.MaterialToolbar>
+                </LinearLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+            </LinearLayout>
 
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="top|center"
-            android:layout_marginTop="?attr/actionBarSize" />
-
-        <LinearLayout
-            android:id="@+id/noSavedBooksLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_gravity="top|center"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationView"
-                android:layout_width="@dimen/_230sdp"
-                android:layout_height="@dimen/_230sdp"
-                app:lottie_url="https://lottie.host/c065ce46-8c5a-4c44-a734-2665aace839e/XCoEZnQ0m1.json"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_gravity="center_horizontal"
-                android:text="No Saved Books"
-                android:textColor="@color/main_text_color"
-                android:textSize="@dimen/_17ssp"
-                android:fontFamily="@font/open_sans_semibold" />
-
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </FrameLayout>
 

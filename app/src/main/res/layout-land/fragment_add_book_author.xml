@@ -22,6 +22,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/back_button"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@drawable/arrow_left_black"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/toolbarProgress"
                     android:layout_width="@dimen/_150sdp"
@@ -36,11 +45,11 @@
             </androidx.appcompat.widget.Toolbar>
 
             <TextView
-                android:id="@+id/addBookInfoText"
+                android:id="@+id/addDescriptionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:text="Add Additional Book Information"
+                android:text="Add book author"
                 android:textSize="@dimen/_20ssp"
                 android:fontFamily="@font/source_sans_pro_bold"
                 android:textColor="@color/main_text_color"
@@ -49,38 +58,39 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/addBookInfoDescription"
+                android:id="@+id/addTitleDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_7sdp"
-                android:text="Please provide the additional information."
+                android:ems="8"
+                android:text="We would like to know the main villain."
                 android:textSize="@dimen/_13ssp"
                 android:fontFamily="@font/open_sans_semibold"
                 android:textColor="@color/gray"
-                app:layout_constraintTop_toBottomOf="@id/addBookInfoText"
+                app:layout_constraintTop_toBottomOf="@id/addDescriptionText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/language_text"
+                android:id="@+id/authorNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_50sdp"
                 android:fontFamily="@font/lato_bold"
-                android:text="Language"
+                android:text="Author Name"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addBookInfoDescription" />
+                app:layout_constraintTop_toBottomOf="@id/addTitleDescription" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextFieldLanguage"
+                android:id="@+id/outlinedTextFieldAuthorName"
                 style="@style/textInputLayoutEditProfile"
                 android:layout_width="@dimen/_250sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:hint="Enter language"
+                android:hint="Enter author name"
                 app:boxStrokeColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
@@ -88,10 +98,10 @@
                 app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/language_text">
+                app:layout_constraintTop_toBottomOf="@id/authorNameText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextLanguage"
+                    android:id="@+id/editTextAuthorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_13ssp"
@@ -99,26 +109,27 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <TextView
-                android:id="@+id/page_count_text"
+                android:id="@+id/authorSurnameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_25sdp"
                 android:fontFamily="@font/lato_bold"
-                android:text="Page Count"
+                android:text="Author Surname"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldLanguage" />
+                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAuthorName" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextFieldPageCount"
+                android:id="@+id/outlinedTextFieldSurname"
                 style="@style/textInputLayoutEditProfile"
                 android:layout_width="@dimen/_250sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:hint="Enter page count"
+                android:hint="Enter author surname"
                 app:boxStrokeColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
@@ -126,55 +137,31 @@
                 app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/page_count_text">
+                app:layout_constraintTop_toBottomOf="@id/authorSurnameText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextPageCount"
+                    android:id="@+id/editTextAuthorSurname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:textSize="@dimen/_13ssp"
                     android:textColor="@color/main_text_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/age_limit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:fontFamily="@font/lato_bold"
-                android:text="Age Limit"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldPageCount" />
-
-            <Spinner
-                android:id="@+id/spinnerAgeLimit"
-                android:layout_width="@dimen/_250sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:spinnerMode="dropdown"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/age_limit_text" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveButton"
+                android:id="@+id/continueButton"
                 style="?attr/materialButtonStyle"
                 android:layout_width="@dimen/_270sdp"
                 android:layout_height="@dimen/_55sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:fontFamily="@font/ubuntu_regular"
-                android:hint="Save"
+                android:hint="Continue"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_13ssp"
                 android:clickable="false"
                 app:cornerRadius="@dimen/_25sdp"
                 app:backgroundTint="@color/button_gray"
-                app:layout_constraintTop_toBottomOf="@id/spinnerAgeLimit"
+                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldSurname"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

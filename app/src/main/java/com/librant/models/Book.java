@@ -23,13 +23,15 @@ public class Book implements Serializable, Parcelable {
     private String availability;
     private Date availabilityDate;
     private List<String> borrowers;
+    private String borrowerName;
+    private String borrowerSurname;
 
     public Book() {}
 
     public Book(String bookId, String title, String authorName, String authorSurname,
                 String description, String imageUrl, String ownerId, List<String> genres,
                 boolean approved, String language, int pageCount, int ageLimit, String availability,
-                Date availabilityDate, List<String> borrowers) {
+                Date availabilityDate, List<String> borrowers, String borrowerName, String borrowerSurname) {
         this.bookId = bookId;
         this.title = title;
         this.authorName = authorName;
@@ -45,6 +47,8 @@ public class Book implements Serializable, Parcelable {
         this.availability = availability;
         this.availabilityDate = availabilityDate;
         this.borrowers = borrowers;
+        this.borrowerName = borrowerName;
+        this.borrowerSurname = borrowerSurname;
     }
 
     protected Book(Parcel in) {
@@ -63,6 +67,8 @@ public class Book implements Serializable, Parcelable {
         availability = in.readString();
         availabilityDate = new Date(in.readLong());
         borrowers = in.createStringArrayList();
+        borrowerName = in.readString();
+        borrowerSurname = in.readString();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -76,6 +82,25 @@ public class Book implements Serializable, Parcelable {
             return new Book[size];
         }
     };
+
+    // Getter and Setter methods for borrowerName and borrowerSurname
+    public String getBorrowerName() {
+        return borrowerName;
+    }
+
+    public void setBorrowerName(String borrowerName) {
+        this.borrowerName = borrowerName;
+    }
+
+    public String getBorrowerSurname() {
+        return borrowerSurname;
+    }
+
+    public void setBorrowerSurname(String borrowerSurname) {
+        this.borrowerSurname = borrowerSurname;
+    }
+
+    // Other existing getter and setter methods
 
     public String getBookId() {
         return bookId;
@@ -219,5 +244,7 @@ public class Book implements Serializable, Parcelable {
         dest.writeString(availability);
         dest.writeLong(availabilityDate != null ? availabilityDate.getTime() : -1);
         dest.writeStringList(borrowers);
+        dest.writeString(borrowerName);
+        dest.writeString(borrowerSurname);
     }
 }

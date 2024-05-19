@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_image"
     android:fillViewport="true"
-    tools:context=".activities.auth.LoginActivity">
+    tools:context=".activities.auth.SignupActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/back_button"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:id="@id/back_button"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10ssp"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/arrow_left_white"
@@ -33,15 +33,15 @@
             app:layout_constraintTop_toBottomOf="@id/back_button" />
 
         <TextView
-            android:id="@+id/welcomeBack_text"
+            android:id="@+id/createAccount_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_35sdp"
             android:fontFamily="@font/coolvetica_rg_regular"
-            android:text="Log In"
-            android:textColor="@color/main_text_color"
-            android:textSize="@dimen/_24ssp"
             android:letterSpacing="0.1"
+            android:text="Create Account"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/_17ssp"
             app:layout_constraintEnd_toEndOf="@id/selector"
             app:layout_constraintStart_toStartOf="@id/selector"
             app:layout_constraintTop_toTopOf="@id/selector" />
@@ -52,34 +52,33 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:fontFamily="@font/revolin_thin"
-            android:text="Log In To Continue Using The App"
+            android:text="Create an Account To Start Using The App"
             android:textColor="@color/main_text_color"
-            android:textSize="@dimen/_13ssp"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintEnd_toEndOf="@id/selector"
             app:layout_constraintStart_toStartOf="@id/selector"
-            app:layout_constraintTop_toBottomOf="@id/welcomeBack_text" />
+            app:layout_constraintTop_toBottomOf="@id/createAccount_text" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlined_TextField_email"
             style="@style/textInputLayoutAuth"
             android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             android:hint="Email"
             app:boxBackgroundColor="#F4F4F4"
             app:boxStrokeColor="@color/light_green"
             app:cursorColor="@color/light_green"
-            app:layout_constraintBottom_toTopOf="@id/outlined_TextField_password"
-            app:layout_constraintLeft_toLeftOf="@id/selector"
-            app:layout_constraintRight_toRightOf="@id/selector"
-            app:layout_constraintTop_toBottomOf="@id/description_text">
+            app:layout_constraintEnd_toEndOf="@id/selector"
+            app:layout_constraintStart_toStartOf="@id/selector"
+            app:layout_constraintTop_toBottomOf="@id/description_text"
+            app:layout_constraintBottom_toTopOf="@id/outlined_TextField_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_11ssp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,41 +96,65 @@
             app:cursorColor="@color/light_green"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/gray"
-            app:layout_constraintBottom_toTopOf="@id/login_button"
-            app:layout_constraintLeft_toLeftOf="@id/selector"
-            app:layout_constraintRight_toRightOf="@id/selector"
-            app:layout_constraintTop_toBottomOf="@id/outlined_TextField_email">
+            app:layout_constraintEnd_toEndOf="@id/selector"
+            app:layout_constraintStart_toStartOf="@id/selector"
+            app:layout_constraintTop_toBottomOf="@id/outlined_TextField_email"
+            app:layout_constraintBottom_toTopOf="@id/outlined_TextField_passwordConfirm">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_11ssp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlined_TextField_passwordConfirm"
+            style="@style/textInputLayoutAuth"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:hint="Confirm Password"
+            app:boxBackgroundColor="#F4F4F4"
+            app:boxStrokeColor="@color/light_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:cursorColor="@color/light_green"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/gray"
+            app:layout_constraintEnd_toEndOf="@id/selector"
+            app:layout_constraintStart_toStartOf="@id/selector"
+            app:layout_constraintTop_toBottomOf="@id/outlined_TextField_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11ssp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_button"
-            android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:id="@+id/signup_button"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_marginTop="@dimen/_30sdp"
             android:fontFamily="@font/open_sans_semibold"
-            android:hint="Login"
+            android:text="Sign Up"
             android:textColorHint="@color/white"
             android:textSize="@dimen/_13ssp"
             app:backgroundTint="@color/light_green"
             app:layout_constraintEnd_toEndOf="@id/selector"
             app:layout_constraintStart_toStartOf="@id/selector"
-            app:layout_constraintTop_toBottomOf="@id/outlined_TextField_password" />
+            app:layout_constraintTop_toBottomOf="@id/outlined_TextField_passwordConfirm" />
 
         <LinearLayout
-            android:id="@+id/signup_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_20sdp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/selector"
             app:layout_constraintEnd_toEndOf="@id/selector"
             app:layout_constraintStart_toStartOf="@id/selector">
@@ -140,19 +163,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
-                android:text="Don't have an account?"
+                android:text="Already have an account?"
                 android:textColor="@color/gray"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_11ssp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/signup_text"
+                android:id="@+id/login_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
-                android:text=" Sign Up"
+                android:text=" Log In"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_11ssp"
                 android:textStyle="bold" />
 
         </LinearLayout>

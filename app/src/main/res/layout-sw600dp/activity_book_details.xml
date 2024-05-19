@@ -18,35 +18,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonDirection"
                 style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="center"
                 android:fontFamily="@font/open_sans_semibold"
                 android:text="Direction"
                 android:textColor="@color/button_gray"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_10ssp"
                 app:icon="@drawable/map_icon"
                 app:iconTint="@color/button_gray"
-                app:iconSize="@dimen/_18sdp"
+                app:iconSize="@dimen/_16sdp"
                 app:iconPadding="-10dp"
                 app:strokeColor="@color/button_gray"
                 app:strokeWidth="@dimen/_1sdp"
                 app:cornerRadius="@dimen/_20sdp"/>
 
+            <Space
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="wrap_content"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonContactOwner"
                 style="?attr/materialButtonStyle"
-                android:layout_width="@dimen/_250sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_42sdp"
                 android:fontFamily="@font/open_sans_semibold"
                 android:hint="Contact Owner"
                 android:textColorHint="@color/white"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_11ssp"
                 app:backgroundTint="@color/light_green"
                 app:cornerRadius="@dimen/_15sdp" />
 
@@ -136,8 +140,8 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/book_cover_image"
-                        android:layout_width="@dimen/_150sdp"
-                        android:layout_height="@dimen/_230sdp"
+                        android:layout_width="@dimen/_120sdp"
+                        android:layout_height="@dimen/_190sdp"
                         android:scaleType="centerCrop" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -150,7 +154,7 @@
                     android:fontFamily="@font/ubuntu_regular"
                     android:text="Book Author"
                     android:textColor="@color/gray"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:id="@+id/bookTitle"
@@ -160,7 +164,7 @@
                     android:fontFamily="@font/bion_bold"
                     android:text="Book Title"
                     android:textColor="@color/main_text_color"
-                    android:textSize="@dimen/_16ssp"
+                    android:textSize="@dimen/_13ssp"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal"
                     android:ellipsize="end" />
@@ -179,7 +183,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/typesLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_margin="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:cardBackgroundColor="#E8F5E9"
@@ -209,7 +213,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginEnd="@dimen/_5sdp"
                             android:textColor="@color/main_text_color"
-                            android:textSize="@dimen/_12ssp"
+                            android:textSize="@dimen/_9ssp"
                             android:fontFamily="@font/open_sans_semibold" />
 
                     </LinearLayout>
@@ -234,7 +238,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginEnd="@dimen/_5sdp"
                             android:textColor="@color/main_text_color"
-                            android:textSize="@dimen/_12ssp"
+                            android:textSize="@dimen/_9ssp"
                             android:fontFamily="@font/open_sans_semibold" />
 
                     </LinearLayout>
@@ -259,7 +263,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginEnd="@dimen/_5sdp"
                             android:textColor="@color/main_text_color"
-                            android:textSize="@dimen/_12ssp"
+                            android:textSize="@dimen/_9ssp"
                             android:fontFamily="@font/open_sans_semibold" />
 
                     </LinearLayout>
@@ -275,6 +279,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/_11sdp"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintTop_toBottomOf="@id/typesLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

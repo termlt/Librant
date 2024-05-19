@@ -67,8 +67,8 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_width="@dimen/_130sdp"
+                android:layout_height="@dimen/_130sdp"
                 android:layout_gravity="center_horizontal"
                 app:lottie_url="https://lottie.host/37e7c63b-5fc0-4c49-af77-b7a2ce8265da/nvkCk3tlJz.json"
                 app:lottie_autoPlay="true"
@@ -82,7 +82,7 @@
                 android:text="Anonymous"
                 android:letterSpacing="0.1"
                 android:textColor="@color/main_text_color"
-                android:textSize="@dimen/_19ssp"
+                android:textSize="@dimen/_17ssp"
                 android:textAlignment="center"
                 android:fontFamily="@font/coolvetica_rg_regular"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +97,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Contact Information"
                 android:textColor="@color/gray"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -162,6 +162,7 @@
                 app:lottie_loop="true" />
 
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

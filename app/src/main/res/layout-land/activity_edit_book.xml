@@ -75,11 +75,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Title"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editBookInfoDescription" />
 
@@ -112,11 +112,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Author Name"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldTitle" />
 
@@ -149,11 +149,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Author Surname"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAuthorName" />
 
@@ -186,11 +186,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAuthorSurname" />
 
@@ -223,11 +223,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Language"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldDescription" />
 
@@ -260,11 +260,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Page Count"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldLanguage" />
 
@@ -297,11 +297,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Age Limit"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldPageCount" />
 
@@ -320,11 +320,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Availability"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/spinnerAgeLimit" />
 

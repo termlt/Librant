@@ -159,6 +159,7 @@ public class UploadImageFragment extends Fragment {
                                 book.setImageUrl(uri.toString());
                                 book.setOwnerId(mAuth.getCurrentUser().getUid());
                                 book.setApproved(false);
+                                book.setAvailability("Available");
 
                                 db.collection(BOOK_COLLECTION)
                                         .add(book)

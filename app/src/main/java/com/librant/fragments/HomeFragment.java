@@ -39,6 +39,7 @@ import com.librant.models.Book;
 import com.librant.util.FillDetailsBottomSheet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -246,24 +247,28 @@ public class HomeFragment extends Fragment {
 
         executorService.execute(() -> {
             Set<String> bookIds = new HashSet<>();
-            List<Book> tempBookList = new ArrayList<>();
+            final List<Book>[] tempBookList = new List[]{new ArrayList<>()};
 
             db.collection("books")
                     .whereEqualTo("approved", true)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            List<Book> allBooks = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Book book = document.toObject(Book.class);
                                 String availability = book.getAvailability();
                                 if (availability != null && (availability.equals("Available") || availability.equals("Unavailable")) && bookIds.add(book.getBookId())) {
-                                    tempBookList.add(book);
+                                    allBooks.add(book);
                                 }
                             }
 
+                            Collections.shuffle(allBooks);
+                            tempBookList[0] = allBooks.subList(0, Math.min(10, allBooks.size()));
+
                             mainHandler.post(() -> {
                                 bookList.clear();
-                                bookList.addAll(tempBookList);
+                                bookList.addAll(tempBookList[0]);
                                 bookAdapter.notifyDataSetChanged();
 
                                 if (bookList.isEmpty()) {

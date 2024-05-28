@@ -151,6 +151,36 @@
             app:layout_constraintStart_toStartOf="@id/selector"
             app:layout_constraintTop_toBottomOf="@id/outlined_TextField_passwordConfirm" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/selector"
+            app:layout_constraintEnd_toEndOf="@id/selector"
+            app:layout_constraintStart_toStartOf="@id/selector">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text="Already have an account?"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/login_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text=" Log In"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

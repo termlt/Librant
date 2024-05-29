@@ -29,24 +29,20 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.librant.R;
+import com.librant.activities.BookDetailsActivity;
 import com.librant.activities.EditBookActivity;
 import com.librant.activities.EditProfileActivity;
 import com.librant.activities.auth.LoginActivity;
 import com.librant.activities.auth.MainActivity;
 import com.librant.adapters.BookAdapter;
 import com.librant.databinding.FragmentProfileBinding;
+import com.librant.db.BookCollection;
 import com.librant.fragments.EmptyBooksFragment;
 import com.librant.models.Book;
 import com.librant.viewmodels.ProfileViewModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -61,8 +57,7 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private FragmentProfileBinding binding;
-    private FirebaseStorage storage;
-    private StorageReference photoRef;
+    private BookCollection bookCollection;
     private LinearLayout noSavedBooksLayout;
 
     @Override
@@ -73,6 +68,7 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        bookCollection = new BookCollection();
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         bindViews();
@@ -141,8 +137,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void bindViews() {
-        storage = FirebaseStorage.getInstance();
-
         userNameTextView = binding.userNameTextView;
         contactInfoTextView = binding.contactInfoTextView;
         bookRecyclerView = binding.bookRecyclerView;
@@ -161,6 +155,12 @@ public class ProfileFragment extends Fragment {
         bookAdapter = new BookAdapter(new ArrayList<>());
         bookRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         bookRecyclerView.setAdapter(bookAdapter);
+
+        bookAdapter.setOnItemClickListener(book -> {
+            Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
+            intent.putExtra("book", (Parcelable) book);
+            startActivity(intent);
+        });
     }
 
     private void attachItemTouchHelper() {
@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                if (viewModel.getUserBooks().getValue() != null &&
+                if (tabLayout.getSelectedTabPosition() == 0 && viewModel.getUserBooks().getValue() != null &&
                         !viewModel.getUserBooks().getValue().isEmpty() &&
                         position < viewModel.getUserBooks().getValue().size()) {
                     showEditOrDeleteDialog(position);
@@ -194,10 +194,8 @@ public class ProfileFragment extends Fragment {
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        }).attachToRecyclerView(null);
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
+        }).attachToRecyclerView(bookRecyclerView);
     }
 
     private void initializeTabs() {
@@ -224,7 +222,14 @@ public class ProfileFragment extends Fragment {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
                 .setTitle(book.getTitle())
                 .setMessage("Do you want to edit or delete this book?")
-                .setNegativeButton("Delete", (dialog, which) -> deleteBook(position))
+                .setNegativeButton("Delete", (dialog, which) -> {
+                    bookCollection.deleteBook(book, mAuth.getCurrentUser().getUid(),
+                            aVoid -> {
+                                Snackbar.make(requireView(), "Book deleted successfully.", Snackbar.LENGTH_LONG).show();
+                                bookAdapter.removeBook(position);
+                            },
+                            e -> Snackbar.make(requireView(), "Something went wrong.", Snackbar.LENGTH_LONG).show());
+                })
                 .setPositiveButton("Edit", (dialog, which) -> {
                     Intent editBookIntent = new Intent(getActivity(), EditBookActivity.class);
                     editBookIntent.putExtra("book", (Parcelable) book);
@@ -257,14 +262,6 @@ public class ProfileFragment extends Fragment {
         alertDialog.show();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        viewModel.getUserBooks().removeObservers(getViewLifecycleOwner());
-        viewModel.getRecentlyViewedBooks().removeObservers(getViewLifecycleOwner());
-    }
-
     private void updateUserInfo(TextView username, TextView contactInfoTextView) {
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -281,65 +278,12 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void deleteBook(int position) {
-        Book bookToDelete = bookAdapter.getBooks().get(position);
-        String bookId = bookToDelete.getBookId();
-        String ownerId = bookToDelete.getOwnerId();
-        String imageUrl = bookToDelete.getImageUrl();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
-        if (ownerId.equals(mAuth.getCurrentUser().getUid())) {
-            db.collection("books").document(bookId).delete()
-                    .addOnSuccessListener(e -> {
-                        deleteImageFromStorage(imageUrl);
-                        bookAdapter.removeBook(position);
-                        removeFromUserCollections(bookId);
-                    })
-                    .addOnFailureListener(e ->
-                            Snackbar.make(requireView(), "Something went wrong.", Snackbar.LENGTH_LONG).show());
-        } else {
-            Snackbar.make(requireView(), "You do not have permission to delete this book.", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    private void deleteImageFromStorage(String imageUrl) {
-        System.out.println(imageUrl);
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            photoRef = storage.getReferenceFromUrl(imageUrl);
-
-            photoRef.delete().addOnSuccessListener(aVoid -> {
-                Snackbar.make(requireView(), "Image deleted successfully.", Snackbar.LENGTH_LONG).show();
-            }).addOnFailureListener(exception -> {
-                Snackbar.make(requireView(), "Failed to delete image.", Snackbar.LENGTH_LONG).show();
-            });
-        }
-    }
-
-    private void removeFromUserCollections(String bookId) {
-        db.collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    List<String> viewedBooks = (List<String>) document.get("viewedBooks");
-                    List<String> savedBooks = (List<String>) document.get("savedBooks");
-
-                    boolean needsUpdate = false;
-                    if (viewedBooks != null && viewedBooks.contains(bookId)) {
-                        viewedBooks.remove(bookId);
-                        needsUpdate = true;
-                    }
-                    if (savedBooks != null && savedBooks.contains(bookId)) {
-                        savedBooks.remove(bookId);
-                        needsUpdate = true;
-                    }
-
-                    if (needsUpdate) {
-                        Map<String, Object> updates = new HashMap<>();
-                        updates.put("viewedBooks", viewedBooks);
-                        updates.put("savedBooks", savedBooks);
-                        db.collection("users").document(document.getId()).update(updates);
-                    }
-                }
-            }
-        });
+        viewModel.getUserBooks().removeObservers(getViewLifecycleOwner());
+        viewModel.getRecentlyViewedBooks().removeObservers(getViewLifecycleOwner());
     }
 
     @Override

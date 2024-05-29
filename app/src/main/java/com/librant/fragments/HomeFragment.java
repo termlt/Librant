@@ -27,22 +27,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.librant.R;
 import com.librant.activities.AddBookActivity;
 import com.librant.activities.BookDetailsActivity;
 import com.librant.activities.auth.MainActivity;
 import com.librant.adapters.BookAdapter;
 import com.librant.databinding.FragmentHomeBinding;
+import com.librant.db.BookCollection;
 import com.librant.db.UserCollection;
 import com.librant.models.Book;
 import com.librant.util.FillDetailsBottomSheet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,6 +59,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout linearLayoutEmptyBooks;
     private FragmentHomeBinding binding;
     private UserCollection userCollection;
+    private BookCollection bookCollection;
     private ExecutorService executorService;
     private Handler mainHandler;
 
@@ -90,6 +88,7 @@ public class HomeFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
         userCollection = new UserCollection();
+        bookCollection = new BookCollection();
         swipeRefreshLayout = binding.swipeRefreshLayout;
         addBookButton = binding.addBookButton;
         notificationsButton = binding.notificationsButton;
@@ -185,8 +184,7 @@ public class HomeFragment extends Fragment {
                 if (tab.getPosition() == 0) {
                     fetchLatestBooks();
                 } else {
-                    String selectedGenre = genres[tab.getPosition()];
-                    fetchBooksByGenre(selectedGenre);
+                    fetchBooksByGenre(genres[tab.getPosition()]);
                 }
             }
 
@@ -244,87 +242,56 @@ public class HomeFragment extends Fragment {
 
     private void fetchLatestBooks() {
         swipeRefreshLayout.setRefreshing(true);
+        bookCollection.fetchLatestBooks(new BookCollection.OnBooksLoadedListener() {
+            @Override
+            public void onBooksLoaded(List<Book> books) {
+                mainHandler.post(() -> {
+                    bookList.clear();
+                    bookList.addAll(books);
+                    bookAdapter.notifyDataSetChanged();
 
-        executorService.execute(() -> {
-            Set<String> bookIds = new HashSet<>();
-            final List<Book>[] tempBookList = new List[]{new ArrayList<>()};
+                    if (bookList.isEmpty()) {
+                        linearLayoutEmptyBooks.setVisibility(View.VISIBLE);
+                    } else {
+                        linearLayoutEmptyBooks.setVisibility(View.GONE);
+                    }
 
-            db.collection("books")
-                    .whereEqualTo("approved", true)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            List<Book> allBooks = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Book book = document.toObject(Book.class);
-                                String availability = book.getAvailability();
-                                if (availability != null && (availability.equals("Available") || availability.equals("Unavailable")) && bookIds.add(book.getBookId())) {
-                                    allBooks.add(book);
-                                }
-                            }
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }
 
-                            Collections.shuffle(allBooks);
-                            tempBookList[0] = allBooks.subList(0, Math.min(10, allBooks.size()));
-
-                            mainHandler.post(() -> {
-                                bookList.clear();
-                                bookList.addAll(tempBookList[0]);
-                                bookAdapter.notifyDataSetChanged();
-
-                                if (bookList.isEmpty()) {
-                                    linearLayoutEmptyBooks.setVisibility(View.VISIBLE);
-                                } else {
-                                    linearLayoutEmptyBooks.setVisibility(View.GONE);
-                                }
-
-                                swipeRefreshLayout.setRefreshing(false);
-                            });
-                        } else {
-                            mainHandler.post(() -> swipeRefreshLayout.setRefreshing(false));
-                        }
-                    });
-        });
+            @Override
+            public void onFailure(Exception e) {
+                mainHandler.post(() -> swipeRefreshLayout.setRefreshing(false));
+            }
+        }, executorService);
     }
 
     private void fetchBooksByGenre(String genre) {
         swipeRefreshLayout.setRefreshing(true);
+        bookCollection.fetchBooksByGenre(genre, new BookCollection.OnBooksLoadedListener() {
+            @Override
+            public void onBooksLoaded(List<Book> books) {
+                mainHandler.post(() -> {
+                    bookList.clear();
+                    bookList.addAll(books);
+                    bookAdapter.notifyDataSetChanged();
 
-        executorService.execute(() -> {
-            Set<String> bookIds = new HashSet<>();
-            List<Book> tempBookList = new ArrayList<>();
+                    if (bookList.isEmpty()) {
+                        linearLayoutEmptyBooks.setVisibility(View.VISIBLE);
+                    } else {
+                        linearLayoutEmptyBooks.setVisibility(View.GONE);
+                    }
 
-            db.collection("books")
-                    .whereArrayContains("genres", genre)
-                    .whereEqualTo("approved", true)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Book book = document.toObject(Book.class);
-                                String availability = book.getAvailability();
-                                if (availability != null && (availability.equals("Available") || availability.equals("Unavailable")) && bookIds.add(book.getBookId())) {
-                                    tempBookList.add(book);
-                                }
-                            }
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }
 
-                            mainHandler.post(() -> {
-                                bookList.clear();
-                                bookList.addAll(tempBookList);
-                                bookAdapter.notifyDataSetChanged();
-
-                                if (bookList.isEmpty()) {
-                                    linearLayoutEmptyBooks.setVisibility(View.VISIBLE);
-                                } else {
-                                    linearLayoutEmptyBooks.setVisibility(View.GONE);
-                                }
-
-                                swipeRefreshLayout.setRefreshing(false);
-                            });
-                        } else {
-                            mainHandler.post(() -> swipeRefreshLayout.setRefreshing(false));
-                        }
-                    });
-        });
+            @Override
+            public void onFailure(Exception e) {
+                mainHandler.post(() -> swipeRefreshLayout.setRefreshing(false));
+            }
+        }, executorService);
     }
 
     private void loadPendingBooks() {
@@ -339,18 +306,17 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        db.collection("pendingBooks")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<Book> books = new ArrayList<>();
-                        for (DocumentSnapshot document : task.getResult()) {
-                            Book book = document.toObject(Book.class);
-                            books.add(book);
-                        }
-                        latestBooksAdapter.setBooks(books);
-                    }
-                });
+        bookCollection.loadPendingBooks(new BookCollection.OnBooksLoadedListener() {
+            @Override
+            public void onBooksLoaded(List<Book> books) {
+                latestBooksAdapter.setBooks(books);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle the failure
+            }
+        });
     }
 
     private void showFillDetailsBottomSheet() {

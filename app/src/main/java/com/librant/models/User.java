@@ -12,20 +12,6 @@ public class User {
     public User() {
     }
 
-    public User(String id, String name, String surname, String phoneNumber,
-                String address, List<String> savedBooks, List<String> viewedBooks,
-                boolean phoneNumberVisible, boolean addressVisible) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.savedBooks = savedBooks;
-        this.viewedBooks = viewedBooks;
-        this.phoneNumberVisible = phoneNumberVisible;
-        this.addressVisible = addressVisible;
-    }
-
     public String getId() {
         return id;
     }

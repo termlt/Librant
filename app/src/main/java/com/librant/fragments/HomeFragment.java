@@ -313,9 +313,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Exception e) {
-                // Handle the failure
-            }
+            public void onFailure(Exception e) {}
         });
     }
 

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/_16sdp"
+    android:background="@color/background_color"
     tools:context=".activities.auth.MainActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -16,13 +18,20 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_200sdp"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="@dimen/_230sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_60sdp"
-                android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="1:1"
-                app:srcCompat="@drawable/girl_offers_illustration" />
+                app:cardBackgroundColor="@color/white">
+
+                <ImageView
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:srcCompat="@drawable/analytics_illustration" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/explore_your_books_text"
@@ -41,10 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="Embark on Your Literary Journey with Ease"
-                android:textColor="@color/gray"
+                android:textColor="@color/text_color_secondary"
                 android:textSize="@dimen/_13ssp"
                 android:fontFamily="@font/revolin_thin" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,49 +64,28 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/signup_button"
                     style="?attr/materialButtonStyle"
-                    android:layout_width="@dimen/_200sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/open_sans_semibold"
-                    android:hint="Sign Up"
+                    android:hint="Sign up"
                     android:textColorHint="@color/white"
                     android:textSize="@dimen/_13ssp"
                     app:backgroundTint="@color/light_green"
-                    app:cornerRadius="@dimen/_15ssp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/outlined_TextField_passwordConfirm" />
+                    app:cornerRadius="@dimen/_20ssp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/login_button"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="@dimen/_200sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:layout_marginTop="@dimen/_20ssp"
                     android:fontFamily="@font/lato_bold"
                     android:hint="Login"
                     android:textColorHint="@color/main_text_color"
                     android:textSize="@dimen/_13ssp"
-                    app:cornerRadius="@dimen/_15ssp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:cornerRadius="@dimen/_20ssp"
                     app:strokeColor="@color/light_green"
                     app:strokeWidth="@dimen/_3ssp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/guest_button"
-                    style="?attr/materialButtonStyle"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_marginTop="@dimen/_20ssp"
-                    android:fontFamily="@font/open_sans_semibold"
-                    android:hint="Guest Mode"
-                    android:textColorHint="@color/white"
-                    android:textSize="@dimen/_13ssp"
-                    app:backgroundTint="#A9B34F"
-                    app:cornerRadius="@dimen/_15ssp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/outlined_TextField_passwordConfirm" />
 
             </LinearLayout>
 

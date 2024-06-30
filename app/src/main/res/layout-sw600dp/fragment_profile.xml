@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +35,7 @@
                 android:text="Profile"
                 android:textColor="@color/main_text_color"
                 android:fontFamily="@font/kelson_sans_bold"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_11ssp" />
 
             <ImageView
                 android:id="@+id/logoutConfirmationButton"
@@ -67,8 +68,8 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
-                android:layout_width="@dimen/_110sdp"
-                android:layout_height="@dimen/_110sdp"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_120sdp"
                 android:layout_gravity="center_horizontal"
                 app:lottie_url="https://lottie.host/37e7c63b-5fc0-4c49-af77-b7a2ce8265da/nvkCk3tlJz.json"
                 app:lottie_autoPlay="true"
@@ -79,10 +80,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:text="Anonymous"
                 android:letterSpacing="0.1"
                 android:textColor="@color/main_text_color"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_16ssp"
                 android:textAlignment="center"
                 android:fontFamily="@font/coolvetica_rg_regular"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,8 +97,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:text="Contact Information"
-                android:textColor="@color/gray"
+                android:textColor="@color/light_gray"
                 android:textSize="@dimen/_10ssp"
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -119,14 +122,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            app:tabSelectedTextColor="#4A9C26"
+            android:backgroundTint="@color/background_color"
+            app:tabSelectedTextColor="#53BA26"
             app:tabIndicatorAnimationMode="linear"
             app:tabMode="fixed"
-            app:tabTextColor="#263026"
+            app:tabTextColor="@color/main_text_color"
             app:tabIndicatorColor="#37A12B"
             app:layout_constraintTop_toBottomOf="@+id/divider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/editTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Swipe left to edit a book"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_9ssp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/optionsLayout" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
@@ -137,7 +158,6 @@
             android:id="@+id/book_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/optionsLayout" />
 
@@ -155,8 +175,8 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationViewNotFound"
-                android:layout_width="@dimen/_230sdp"
-                android:layout_height="@dimen/_230sdp"
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_160sdp"
                 app:lottie_url="https://lottie.host/47a53bed-704b-4527-aca1-2050c4eef022/uKITMKruPw.json"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true" />

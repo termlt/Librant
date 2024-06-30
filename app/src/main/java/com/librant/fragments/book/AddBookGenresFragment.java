@@ -1,16 +1,13 @@
 package com.librant.fragments.book;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.CompoundButton;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.librant.R;
 import com.librant.activities.HomeActivity;
 import com.librant.models.Book;
@@ -39,8 +35,7 @@ public class AddBookGenresFragment extends Fragment {
             book = (Book) args.getSerializable("book");
         }
 
-        AppCompatButton backButton = root.findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        root.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getParentFragmentManager();
@@ -53,12 +48,6 @@ public class AddBookGenresFragment extends Fragment {
                 }
             }
         });
-
-        LinearProgressIndicator progressIndicator = root.findViewById(R.id.toolbarProgress);
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 55, 70);
-        progressAnimator.setDuration(400);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.start();
 
         MaterialButton continueButton = root.findViewById(R.id.continueButton);
         continueButton.setEnabled(false);

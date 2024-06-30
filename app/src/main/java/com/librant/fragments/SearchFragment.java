@@ -19,9 +19,9 @@ import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.librant.R;
 import com.librant.activities.BookDetailsActivity;
 import com.librant.adapters.BookAdapter;
+import com.librant.databinding.FragmentSearchBinding;
 import com.librant.models.Book;
 
 import java.util.ArrayList;
@@ -32,16 +32,17 @@ public class SearchFragment extends Fragment {
     private FirebaseFirestore db;
     private ConstraintLayout booksNotFoundLayout;
     private LinearLayout searchAnythingLayout;
+    private FragmentSearchBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
 
-        SearchView searchView = view.findViewById(R.id.search_view);
-        SearchBar searchBar = view.findViewById(R.id.search_bar);
-        RecyclerView recyclerView = view.findViewById(R.id.book_recycler_view);
-        booksNotFoundLayout = view.findViewById(R.id.booksNotFoundLayout);
-        searchAnythingLayout = view.findViewById(R.id.searchAnythingLayout);
+        SearchView searchView = binding.searchView;
+        SearchBar searchBar = binding.searchBar;
+        RecyclerView recyclerView = binding.bookRecyclerView;
+        booksNotFoundLayout = binding.booksNotFoundLayout;
+        searchAnythingLayout = binding.searchAnythingLayout;
 
         bookList = new ArrayList<>();
 
@@ -64,18 +65,29 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 searchBar.setText(v.getText());
-                searchAnythingLayout.setVisibility(View.GONE);
-                searchBooks(searchView.getText().toString(), view);
+                searchBooks(searchView.getText().toString());
                 searchView.handleBackInvoked();
                 return true;
             }
         });
 
-        return view;
+        return binding.getRoot();
     }
 
-    private void searchBooks(String searchText, View view) {
+    private void searchBooks(String searchText) {
+        if (searchText.isEmpty()) {
+            searchAnythingLayout.setVisibility(View.VISIBLE);
+            booksNotFoundLayout.setVisibility(View.GONE);
+
+            bookList.clear();
+            bookAdapter.notifyDataSetChanged();
+
+            return;
+        }
+
+        searchAnythingLayout.setVisibility(View.GONE);
         db.collection("books")
+                .whereEqualTo("approved", true)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -83,7 +95,9 @@ public class SearchFragment extends Fragment {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Book book = document.toObject(Book.class);
                             if (book.getTitle().toLowerCase().contains(searchText.toLowerCase())) {
-                                bookList.add(book);
+                                if (book.getAvailability() != null && !book.getAvailability().equals("Hidden")) {
+                                    bookList.add(book);
+                                }
                             }
                         }
 

@@ -4,11 +4,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.librant.R;
+import com.librant.activities.auth.MainActivity;
 import com.librant.databinding.ActivityBookDetailsBinding;
 import com.librant.db.UserCollection;
 import com.librant.fragments.profile.BookOwnerHistoryFragment;
@@ -50,10 +51,12 @@ public class BookDetailsActivity extends AppCompatActivity {
     private List<String> savedBooks;
     private Book book;
     private User bookOwner;
-    private MaterialButton buttonDirection, buttonContactOwner;
     private String bookOwnerLocation;
-    private ImageView saveButton, historyButton, approveButton, disproveButton, backButton;
+    private ImageView saveButton, historyButton, approveButton, disproveButton, bookCoverImage;
     private ActivityBookDetailsBinding binding;
+    private DocumentReference userDocRef;
+    private TextView bookTitleTextView, bookAuthorTextView, bookDescriptionTextView, ageButton, languageButton, pagesButton, genresButton;
+    private MaterialButton directionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,27 +65,40 @@ public class BookDetailsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
+
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         userCollection = new UserCollection();
+        userDocRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
 
         setupUI();
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("book")) {
             book = intent.getParcelableExtra("book");
-            updateRecentlyViewedBooks(book.getBookId());
-            loadBookData(book);
+            if (book != null) {
+                updateRecentlyViewedBooks(book.getBookId());
+                loadBookData(book);
 
-            fetchBookOwner();
+                if (!book.getOwnerId().equals(mAuth.getCurrentUser().getUid()) && book.getAvailability().equals("Unavailable")) {
+                    directionButton.setEnabled(false);
+                }
+
+                fetchBookOwner();
+
+                if (book.isApproved()) {
+                    disableButtons();
+                } else {
+                    enableButtons();
+                }
+            }
         } else {
             finish();
-        }
-
-        if (book.isApproved()) {
-            disableButtons();
-        } else {
-            enableButtons();
         }
     }
 
@@ -91,34 +107,26 @@ public class BookDetailsActivity extends AppCompatActivity {
         historyButton = binding.historyButton;
         disproveButton = binding.disproveButton;
         saveButton = binding.saveButton;
-        backButton = binding.backButton;
-        buttonDirection = binding.buttonDirection;
-        buttonContactOwner = binding.buttonContactOwner;
+
+        directionButton = binding.buttonDirection;
+
+        bookTitleTextView = binding.bookTitle;
+        bookAuthorTextView = binding.bookAuthor;
+        bookDescriptionTextView = binding.bookDescription;
+        ageButton = binding.ageButton;
+        languageButton = binding.languageButton;
+        pagesButton = binding.pagesButton;
+        genresButton = binding.genreButton;
+
+        bookCoverImage = binding.bookCoverImage;
 
         savedBooks = new ArrayList<>();
 
-        backButton.setOnClickListener(view -> finish());
-        saveButton.setOnClickListener(v -> handleSaveButtonClick());
-        buttonDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!bookOwner.isAddressVisible()) {
-                    Snackbar.make(v, "This book owner does not have an address", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    userCollection.getUserById(mAuth.getCurrentUser().getUid(), user -> {
-                        String currentUserAddress = user.getAddress();
-                        if (currentUserAddress == null || currentUserAddress.isEmpty()) {
-                            Snackbar.make(v, "You don't have your address specified", Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            startActivity(new Intent(BookDetailsActivity.this, MapActivity.class)
-                                    .putExtra("ownerLocation", bookOwnerLocation));
-                        }
-                    });
-                }
-            }
-        });
+        binding.backButton.setOnClickListener(view -> finish());
 
-        buttonContactOwner.setOnClickListener(v -> displayOwnerInfo());
+        saveButton.setOnClickListener(v -> handleSaveButtonClick());
+
+        binding.buttonContactOwner.setOnClickListener(v -> displayOwnerInfo());
 
         fetchUserSavedBooks(saveButton);
     }
@@ -127,6 +135,33 @@ public class BookDetailsActivity extends AppCompatActivity {
         userCollection.getUserById(book.getOwnerId(), user -> {
             bookOwner = user;
             if (bookOwner != null) {
+                directionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (book.getOwnerId().equals(mAuth.getCurrentUser().getUid())) {
+                            Snackbar.make(v, "This is your address", Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (!bookOwner.isAddressVisible() || bookOwner.getAddress().isEmpty()) {
+                            Snackbar.make(v, "This book owner does not have an address", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            userCollection.getUserById(mAuth.getCurrentUser().getUid(), user -> {
+                                if (user != null) {
+                                    String currentUserAddress = user.getAddress();
+                                    if (currentUserAddress == null || currentUserAddress.isEmpty()) {
+                                        Snackbar.make(v, "You don't have your address specified", Snackbar.LENGTH_SHORT).show();
+                                    } else {
+                                        startActivity(new Intent(BookDetailsActivity.this, MapActivity.class)
+                                                .putExtra("ownerLocation", bookOwnerLocation));
+                                    }
+                                } else {
+                                    Snackbar.make(v, "You don't have your address specified", Snackbar.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+
                 bookOwnerLocation = bookOwner.getAddress();
             }
 
@@ -144,9 +179,7 @@ public class BookDetailsActivity extends AppCompatActivity {
 
 
     private String formatBorrowerHistory(List<String> borrowers) {
-        if (borrowers == null || borrowers.isEmpty()) {
-            return "No borrower history available.";
-        }
+        if (borrowers == null || borrowers.isEmpty()) return "No borrower history available.";
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         List<String[]> borrowerPartsList = new ArrayList<>();
@@ -178,9 +211,11 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
 
 
+
     private void displayOwnerInfo() {
         if (book.getAvailability().equals("Unavailable")) {
             showUnavailableDialog();
+
         } else if (bookOwner != null && bookOwner.getName() != null) {
             LayoutInflater inflater = getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.dialog_user_info, (ViewGroup) getCurrentFocus(), false);
@@ -221,13 +256,8 @@ public class BookDetailsActivity extends AppCompatActivity {
         addressView.setText(fromHtml("<b>Address:</b> " + addressText));
     }
 
-    @SuppressWarnings("deprecation")
     private Spanned fromHtml(String html){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            return Html.fromHtml(html);
-        }
+        return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
     }
 
     private void showUserInfoDialog(View dialogView) {
@@ -328,28 +358,22 @@ public class BookDetailsActivity extends AppCompatActivity {
 
     private void loadBookData(Book book) {
         if (book != null) {
-            ImageView bookCoverImageView = findViewById(R.id.book_cover_image);
             Glide.with(this)
                     .load(book.getImageUrl())
-                    .into(bookCoverImageView);
+                    .into(bookCoverImage);
 
-            TextView bookTitleTextView = findViewById(R.id.bookTitle);
             bookTitleTextView.setText(book.getTitle());
-
-            TextView bookAuthorTextView = findViewById(R.id.bookAuthor);
             bookAuthorTextView.setText(book.getAuthorName() + " " + book.getAuthorSurname());
-
-            TextView bookDescriptionTextView = findViewById(R.id.bookDescription);
             bookDescriptionTextView.setText(book.getDescription());
-
-            TextView ageButton = findViewById(R.id.ageButton);
             ageButton.setText(book.getAgeLimit() + "+");
-
-            TextView languageButton = findViewById(R.id.languageButton);
             languageButton.setText(book.getLanguage());
+            pagesButton.setText(Integer.toString(book.getPageCount()));
 
-            TextView pagesButton = findViewById(R.id.pagesButton);
-            pagesButton.setText(book.getPageCount() + " Pages");
+            if (book.getGenres() != null && !book.getGenres().isEmpty()) {
+                genresButton.setText(TextUtils.join(", ", book.getGenres()));
+            } else {
+                genresButton.setText("No genres available");
+            }
 
             MaterialButton buttonContactOwner = findViewById(R.id.buttonContactOwner);
 
@@ -373,10 +397,6 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
 
     private void updateRecentlyViewedBooks(String bookId) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        DocumentReference userDocRef = db.collection("users").document(userId);
-
         userDocRef.update("viewedBooks", FieldValue.arrayUnion(bookId));
 
         userDocRef.get().addOnSuccessListener(documentSnapshot -> {

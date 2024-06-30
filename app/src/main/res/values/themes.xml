@@ -27,18 +27,18 @@
     <style name="CustomAlertDialog" parent="ThemeOverlay.Material3.Dialog.Alert">
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimary">@color/light_gray</item>
     </style>
 
     <style name="TopRoundedCornersCardBookDetails" parent="Widget.Material3.CardView.Elevated">
         <item name="shapeAppearanceOverlay">@style/TopRoundedCornersBook</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
     <style name="TopRoundedCornersBook">
         <item name="cornerSizeTopRight">@dimen/_50sdp</item>
         <item name="cornerSizeTopLeft">@dimen/_50sdp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
 </resources>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:text="Anonymous"
                 android:letterSpacing="0.1"
                 android:textColor="@color/main_text_color"
@@ -95,8 +97,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:text="Contact Information"
-                android:textColor="@color/gray"
+                android:textColor="@color/light_gray"
                 android:textSize="@dimen/_13ssp"
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -119,14 +122,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            app:tabSelectedTextColor="#4A9C26"
+            android:backgroundTint="@color/background_color"
+            app:tabSelectedTextColor="#53BA26"
             app:tabIndicatorAnimationMode="linear"
             app:tabMode="fixed"
-            app:tabTextColor="#263026"
+            app:tabTextColor="@color/main_text_color"
             app:tabIndicatorColor="#37A12B"
             app:layout_constraintTop_toBottomOf="@+id/divider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/editTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Swipe left to edit a book"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_13ssp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/optionsLayout" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
@@ -137,9 +157,8 @@
             android:id="@+id/book_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/optionsLayout" />
+            app:layout_constraintTop_toBottomOf="@id/editTextView" />
 
         <LinearLayout
             android:id="@+id/noSavedBooksLayout"

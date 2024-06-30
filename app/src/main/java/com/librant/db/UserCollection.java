@@ -1,13 +1,12 @@
 package com.librant.db;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.view.View;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,26 +25,29 @@ import java.util.Map;
 public class UserCollection {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public interface GetUserCallback {
-        void onUserReceived(User user);
+    public interface UserCallback {
+        void onCallback(User user);
     }
 
-    public void getUserById(String id, GetUserCallback callback) {
-        db.collection("users").document(id).get().addOnSuccessListener(documentSnapshot -> {
-            User user = new User();
-            if (documentSnapshot.exists() && documentSnapshot.getData() != null) {
-                user.setId((String) documentSnapshot.get("id"));
-                user.setName((String) documentSnapshot.get("name"));
-                user.setSurname((String) documentSnapshot.get("surname"));
-                user.setAddress((String) documentSnapshot.get("address"));
-                user.setPhoneNumber((String) documentSnapshot.get("phoneNumber"));
-                user.setSavedBooks((List<String>) documentSnapshot.get("savedBooks"));
-                user.setViewedBooks((List<String>) documentSnapshot.get("viewedBooks"));
-                user.setAddressVisible((Boolean) documentSnapshot.get("addressVisible"));
-                user.setPhoneNumberVisible((Boolean) documentSnapshot.get("phoneNumberVisible"));
+    public interface SuccessCallback {
+        void onCallback(boolean success);
+    }
+
+    public void getUserById(String userId, final UserCallback userCallback) {
+        db.collection("users").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                User user = documentSnapshot.toObject(User.class);
+                userCallback.onCallback(user);
+            } else {
+                userCallback.onCallback(null);
             }
-            callback.onUserReceived(user);
-        });
+        }).addOnFailureListener(e -> userCallback.onCallback(null));
+    }
+
+    public void createUser(User user, final SuccessCallback successCallback) {
+        db.collection("users").document(user.getId()).set(user)
+                .addOnSuccessListener(aVoid -> successCallback.onCallback(true))
+                .addOnFailureListener(e -> successCallback.onCallback(false));
     }
 
     public void updateUserInfo(View view, User user) {
@@ -56,52 +58,58 @@ public class UserCollection {
         updates.put("address", user.getAddress());
         updates.put("phoneNumberVisible", user.isPhoneNumberVisible());
         updates.put("addressVisible", user.isAddressVisible());
+        updates.put("savedBooks", user.getSavedBooks());
+        updates.put("viewedBooks", user.getViewedBooks());
+
+        System.out.println(user.getId());
+        System.out.println(user.getId());
+        System.out.println(user.getId());
+        System.out.println(user.getId());
+        System.out.println(user.getId());
 
         db.collection("users").document(user.getId()).set(updates, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> Snackbar.make(view, "Profile updated successfully", Snackbar.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Snackbar.make(view, "Failed to update profile", Snackbar.LENGTH_SHORT).show());
-    }
-
-    public boolean isLocationPermissionGranted(Context context) {
-        return ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    public void requestLocationPermission(ActivityCompat.OnRequestPermissionsResultCallback callback, Context context, int requestCode) {
-        ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
-    }
-
-    public void getLocation(Context context, FusedLocationProviderClient fusedLocationClient, OnSuccessListener<Address> onSuccessListener, OnFailureListener onFailureListener) {
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            onFailureListener.onFailure(new Exception("Location permission not granted"));
-            return;
-        }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        getAddressFromLocation(context, latitude, longitude, onSuccessListener, onFailureListener);
-                    } else {
-                        onFailureListener.onFailure(new Exception("Location is null"));
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    Snackbar.make(view, "Profile updated successfully", Snackbar.LENGTH_SHORT).show();
                 })
-                .addOnFailureListener(onFailureListener);
+                .addOnFailureListener(e -> {
+                    Snackbar.make(view, "Failed to update profile", Snackbar.LENGTH_SHORT).show();
+                });
     }
 
-    private void getAddressFromLocation(Context context, double latitude, double longitude, OnSuccessListener<Address> onSuccessListener, OnFailureListener onFailureListener) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                onSuccessListener.onSuccess(addresses.get(0));
-            } else {
-                onFailureListener.onFailure(new Exception("Unable to retrieve address"));
+
+    public boolean isLocationPermissionGranted(Activity activity) {
+        return ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestLocationPermission(Activity activity, ActivityCompat.OnRequestPermissionsResultCallback callback, int requestCode) {
+        ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
+    }
+
+    public void getLocation(Activity activity, FusedLocationProviderClient fusedLocationClient, OnSuccessListener<Address> successListener, OnFailureListener failureListener) {
+        if (isLocationPermissionGranted(activity)) {
+            try {
+                fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            if (addresses != null && !addresses.isEmpty()) {
+                                successListener.onSuccess(addresses.get(0));
+                            } else {
+                                failureListener.onFailure(new Exception("No address found"));
+                            }
+                        } catch (IOException e) {
+                            failureListener.onFailure(e);
+                        }
+                    } else {
+                        failureListener.onFailure(new Exception("Location not found"));
+                    }
+                }).addOnFailureListener(failureListener);
+            } catch (SecurityException e) {
+                failureListener.onFailure(e);
             }
-        } catch (IOException e) {
-            onFailureListener.onFailure(e);
+        } else {
+            failureListener.onFailure(new Exception("Location permission not granted"));
         }
     }
 }

@@ -2,101 +2,102 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="bottom">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/arrow_left_black"
+                android:contentDescription="@string/back_button"
+                app:tint="@color/buttons_color" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/back_button"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:background="@drawable/arrow_left_black"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Edit Book"
+                android:textColor="@color/main_text_color"
+                android:fontFamily="@font/source_sans_pro_bold"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold" />
 
-                <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/toolbarProgress"
-                    android:layout_width="@dimen/_150sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    app:trackThickness="@dimen/_11sdp"
-                    app:trackColor="#E6E5E5"
-                    app:indicatorColor="#3CCD2C"
-                    app:trackCornerRadius="@dimen/_8sdp"/>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-            </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/_16sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <TextView
                 android:id="@+id/editBookInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
+                android:layout_gravity="center"
                 android:text="Edit Book Information"
                 android:textSize="@dimen/_20ssp"
                 android:fontFamily="@font/source_sans_pro_bold"
-                android:textColor="@color/main_text_color"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textColor="@color/main_text_color" />
 
             <TextView
                 android:id="@+id/editBookInfoDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_7sdp"
+                android:layout_gravity="center"
                 android:text="Update your book information."
                 android:textSize="@dimen/_13ssp"
                 android:fontFamily="@font/open_sans_semibold"
-                android:textColor="@color/gray"
-                app:layout_constraintTop_toBottomOf="@id/editBookInfoText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textColor="@color/text_color_secondary" />
 
             <TextView
                 android:id="@+id/title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Title"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editBookInfoDescription" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldTitle"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
-                app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_text">
+                app:boxCornerRadiusBottomEnd="@dimen/_5sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextTitle"
@@ -112,21 +113,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Author Name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldTitle" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldAuthorName"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
@@ -149,21 +148,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Author Surname"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAuthorName" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldAuthorSurname"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
@@ -186,21 +183,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Description"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldAuthorSurname" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldDescription"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
@@ -223,21 +218,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Language"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldDescription" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldLanguage"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
@@ -260,21 +253,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Page Count"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldLanguage" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldPageCount"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
@@ -297,76 +288,59 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Age Limit"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldPageCount" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <Spinner
                 android:id="@+id/spinnerAgeLimit"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:spinnerMode="dropdown"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/age_limit_text" />
+                android:spinnerMode="dropdown" />
 
             <TextView
                 android:id="@+id/availability_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Availability"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerAgeLimit" />
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/_15ssp" />
 
             <Spinner
                 android:id="@+id/spinnerAvailability"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:spinnerMode="dropdown"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/availability_text" />
+                android:spinnerMode="dropdown" />
 
             <TextView
                 android:id="@+id/borrower_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:visibility="gone"
                 android:text="Borrower's Name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerAvailability" />
+                android:textColor="@color/main_text_color"
+                android:textSize="@dimen/_15sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldBorrowerName"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:visibility="gone"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
-                app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower_name_text">
+                app:boxCornerRadiusBottomEnd="@dimen/_5sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextBorrowerName"
@@ -382,30 +356,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_30sdp"
                 android:fontFamily="@font/lato_bold"
                 android:visibility="gone"
                 android:text="Borrower's Surname"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldBorrowerName" />
+                android:textColor="@color/main_text_color"
+                android:textSize="@dimen/_15sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextFieldBorrowerSurname"
                 style="@style/textInputLayoutEditProfile"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:visibility="gone"
-                app:boxStrokeColor="#48984B"
+                app:boxStrokeColor="@color/text_input_outline_color"
+                app:cursorColor="#48984B"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_5sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_5sdp"
-                app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower_surname_text">
+                app:boxCornerRadiusBottomEnd="@dimen/_5sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextBorrowerSurname"
@@ -418,15 +387,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/availabilityDateCard"
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:visibility="gone"
                 app:strokeColor="#48984B"
-                app:strokeWidth="1dp"
-                app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldBorrowerSurname"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:strokeWidth="1dp">
 
                 <TextView
                     android:id="@+id/availabilityDateText"
@@ -442,8 +408,8 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
                 style="?attr/materialButtonStyle"
-                android:layout_width="@dimen/_270sdp"
-                android:layout_height="@dimen/_55sdp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:fontFamily="@font/ubuntu_regular"
                 android:hint="Save"
@@ -451,14 +417,10 @@
                 android:textSize="@dimen/_13ssp"
                 android:clickable="false"
                 app:cornerRadius="@dimen/_25sdp"
-                app:backgroundTint="@color/button_gray"
-                app:layout_constraintTop_toBottomOf="@id/availabilityDateCard"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:backgroundTint="@color/button_gray" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

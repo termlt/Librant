@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.DirectionsApi;
@@ -38,26 +40,31 @@ import com.google.maps.model.DistanceMatrixElement;
 import com.google.maps.model.TravelMode;
 import com.librant.BuildConfig;
 import com.librant.R;
+import com.librant.activities.auth.MainActivity;
+import com.librant.databinding.ActivityMapBinding;
 import com.librant.db.UserCollection;
 
 import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private FirebaseAuth mAuth;
     private GoogleMap gMap;
-    private MaterialCardView backButton, infoButton;
+    private MaterialCardView infoButton;
     private String currentLocation, ownerLocation;
     private String distance, duration;
+    private ActivityMapBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        binding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, MainActivity.class));
             finish();
+            return;
         }
 
         Intent intent = getIntent();
@@ -70,7 +77,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 ownerLocation = intent.getStringExtra("ownerLocation");
 
                 SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                supportMapFragment.getMapAsync(this);
+                if (supportMapFragment != null) {
+                    supportMapFragment.getMapAsync(this);
+                }
 
                 bindViews();
             } else {
@@ -88,9 +97,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void bindViews() {
-        this.backButton = findViewById(R.id.backButton);
-        this.infoButton = findViewById(R.id.infoButton);
-        backButton.setOnClickListener(v -> finish());
+        infoButton = binding.infoButton;
+        binding.backButton.setOnClickListener(v -> finish());
     }
 
     @SuppressLint("PotentialBehaviorOverride")
@@ -106,7 +114,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     .destination(ownerLocation)
                     .await();
         } catch (Exception e) {
-            e.printStackTrace();
+            Snackbar.make(binding.getRoot(), "Please update your location", Snackbar.LENGTH_SHORT).show();
+            new Handler().postDelayed(() ->  finish(), 4000);
+            return;
         }
 
         DirectionsRoute route = result.routes[0];
@@ -169,7 +179,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .setPositiveButton("OK", (dialogInterface, which) -> dialogInterface.dismiss())
                 .show();
 
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.DKGRAY);
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
     }
 
     private void showBottomSheetDialog(String distance, String eta) {

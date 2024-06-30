@@ -24,6 +24,19 @@
         android:theme="@style/Theme.Librant"
         tools:targetApi="31">
         <activity
+            android:name=".activities.TermsConditionsActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PrivacyPolicyActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:exported="false" />
+        <activity
+            android:name=".activities.auth.AuthActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".activities.EditProfileActivity"
             android:exported="false" />
         <activity
@@ -41,12 +54,6 @@
         <activity
             android:name=".activities.HomeActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
-            android:exported="false" />
-        <activity
-            android:name=".activities.auth.SignupActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.auth.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".activities.auth.MainActivity"

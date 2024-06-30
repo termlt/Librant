@@ -27,6 +27,24 @@ public class BookCollection {
         void onFailure(Exception e);
     }
 
+    public interface OnPendingBooksCountListener {
+        void onCountLoaded(int count);
+        void onFailure(Exception e);
+    }
+
+    public void getPendingBooksCount(OnPendingBooksCountListener listener) {
+        db.collection("pendingBooks")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int count = task.getResult().size();
+                        listener.onCountLoaded(count);
+                    } else {
+                        listener.onFailure(task.getException());
+                    }
+                });
+    }
+
     public void getUserBooks(String userId, OnBooksLoadedListener listener) {
         List<Book> bookList = new ArrayList<>();
 
@@ -58,7 +76,7 @@ public class BookCollection {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Book book = document.toObject(Book.class);
                                 String availability = book.getAvailability();
-                                if (availability != null && (availability.equals("Available") || availability.equals("Unavailable"))) {
+                                if (availability != null && (!book.getAvailability().equals("Hidden") || availability.equals("Unavailable"))) {
                                     allBookIds.add(book.getBookId());
                                 }
                             }
@@ -253,4 +271,5 @@ public class BookCollection {
             }
         });
     }
+
 }

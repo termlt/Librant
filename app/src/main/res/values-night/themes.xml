@@ -1,0 +1,44 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Librant" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimaryDark">@color/background_color</item>
+        <item name="android:navigationBarColor">#191919</item>
+    </style>
+
+    <style name="Theme.Librant" parent="Base.Theme.Librant" />
+
+    <style name="textInputLayoutAuth" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/gray</item>
+    </style>
+
+    <style name="textInputLayoutEditProfile" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">#608A1D</item>
+    </style>
+
+    <style name="NoIndicatorBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemBackground">@android:color/transparent</item>
+        <item name="android:background">@null</item>
+        <item name="itemPaddingTop">@dimen/_10sdp</item>
+        <item name="itemPaddingBottom">@dimen/_10sdp</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+    </style>
+
+    <style name="CustomAlertDialog" parent="ThemeOverlay.Material3.Dialog.Alert">
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="colorPrimary">@color/text_color_secondary</item>
+    </style>
+
+    <style name="TopRoundedCornersCardBookDetails" parent="Widget.Material3.CardView.Elevated">
+        <item name="shapeAppearanceOverlay">@style/TopRoundedCornersBook</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+    </style>
+
+
+    <style name="TopRoundedCornersBook">
+        <item name="cornerSizeTopRight">@dimen/_50sdp</item>
+        <item name="cornerSizeTopLeft">@dimen/_50sdp</item>
+    </style>
+
+</resources>

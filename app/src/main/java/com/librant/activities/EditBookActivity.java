@@ -1,15 +1,14 @@
 package com.librant.activities;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,6 +43,8 @@ public class EditBookActivity extends AppCompatActivity {
     private TextInputEditText editTextBorrowerSurname;
     private TextInputLayout outlinedTextFieldBorrowerName;
     private TextInputLayout outlinedTextFieldBorrowerSurname;
+
+    private ImageButton backButton;
 
     private Spinner spinnerAgeLimit;
     private Spinner spinnerAvailability;
@@ -80,11 +80,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         initViews();
 
-        LinearProgressIndicator progressIndicator = findViewById(R.id.toolbarProgress);
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 15, 30);
-        progressAnimator.setDuration(400);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.start();
+        backButton.setOnClickListener(v -> finish());
 
         saveButton.setEnabled(false);
 
@@ -225,12 +221,13 @@ public class EditBookActivity extends AppCompatActivity {
         availabilityDateCard = findViewById(R.id.availabilityDateCard);
         availabilityDateText = findViewById(R.id.availabilityDateText);
 
+        backButton = findViewById(R.id.btn_back);
+
         outlinedTextFieldBorrowerName = findViewById(R.id.outlinedTextFieldBorrowerName);
         outlinedTextFieldBorrowerSurname = findViewById(R.id.outlinedTextFieldBorrowerSurname);
 
         availabilityDateCard.setOnClickListener(v -> showDatePicker());
     }
-
 
     private void loadBookData() {
         if (book != null) {
@@ -264,7 +261,6 @@ public class EditBookActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private int getSpinnerIndex(Spinner spinner, String value) {
         ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
@@ -302,8 +298,6 @@ public class EditBookActivity extends AppCompatActivity {
         checkAllFields();
     }
 
-
-
     private void hideBorrowerInfo() {
         editTextBorrowerName.setVisibility(View.GONE);
         editTextBorrowerSurname.setVisibility(View.GONE);
@@ -318,7 +312,6 @@ public class EditBookActivity extends AppCompatActivity {
         isBorrowerSurnameFilled = false;
         checkAllFields();
     }
-
 
     private void showDatePicker() {
         CalendarConstraints constraints = new CalendarConstraints.Builder()
@@ -347,5 +340,4 @@ public class EditBookActivity extends AppCompatActivity {
             }
         });
     }
-
 }

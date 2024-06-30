@@ -1,30 +1,25 @@
 package com.librant.fragments.book;
 
-import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.librant.R;
-import com.librant.activities.HomeActivity;
 import com.librant.models.Book;
 
 public class AddBookTitleFragment extends Fragment {
     private TextInputEditText editTextTitle;
-    private AppCompatButton backButton;
+    private ImageButton backButton;
     private MaterialButton continueButton;
     private Book book;
 
@@ -32,21 +27,8 @@ public class AddBookTitleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_add_book_title, container, false);
 
-        backButton = root.findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-            }
-        });
-
-        LinearProgressIndicator progressIndicator = root.findViewById(R.id.toolbarProgress);
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 0, 15);
-        progressAnimator.setDuration(400);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.start();
+        backButton = root.findViewById(R.id.btn_back);
+        backButton.setOnClickListener(view -> getActivity().finish());
 
         continueButton = root.findViewById(R.id.continueButton);
         continueButton.setEnabled(false);

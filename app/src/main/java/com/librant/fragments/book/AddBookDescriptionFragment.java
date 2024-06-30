@@ -1,6 +1,5 @@
 package com.librant.fragments.book;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,15 +7,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.librant.R;
 import com.librant.activities.HomeActivity;
@@ -36,8 +32,7 @@ public class AddBookDescriptionFragment extends Fragment {
             book = (Book) args.getSerializable("book");
         }
 
-        AppCompatButton backButton = root.findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        root.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getParentFragmentManager();
@@ -50,13 +45,6 @@ public class AddBookDescriptionFragment extends Fragment {
                 }
             }
         });
-
-
-        LinearProgressIndicator progressIndicator = root.findViewById(R.id.toolbarProgress);
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 35, 55);
-        progressAnimator.setDuration(400);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.start();
 
         continueButton = root.findViewById(R.id.continueButton);
         continueButton.setEnabled(false);

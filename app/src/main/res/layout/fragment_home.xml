@@ -2,6 +2,7 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
+    android:background="@color/background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,6 +27,7 @@
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
+                        android:background="@color/background_color"
                         app:liftOnScroll="true"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +47,6 @@
                                 android:visibility="gone" />
 
                             <TextView
-                                android:id="@+id/appName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -82,10 +83,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
-                        app:tabSelectedTextColor="#4A9C26"
+                        android:backgroundTint="@color/background_color"
+                        app:tabSelectedTextColor="#53BA26"
                         app:tabIndicatorAnimationMode="linear"
                         app:tabMode="scrollable"
-                        app:tabTextColor="#263026"
+                        app:tabTextColor="@color/main_text_color"
                         app:tabIndicatorColor="#37A12B"
                         app:layout_constraintTop_toBottomOf="@+id/divider"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -130,7 +132,7 @@
                         android:id="@+id/book_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
                         android:nestedScrollingEnabled="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -150,6 +152,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/navigation_drawer"/>
+        app:headerLayout="@layout/navigation_drawer_pending_admin"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

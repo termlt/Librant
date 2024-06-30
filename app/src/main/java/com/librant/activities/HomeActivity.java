@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.librant.R;
-import com.librant.activities.auth.LoginActivity;
+import com.librant.activities.auth.MainActivity;
 import com.librant.databinding.ActivityHomeBinding;
 import com.librant.fragments.HomeFragment;
 import com.librant.fragments.SavedFragment;
@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            startActivity(new Intent(HomeActivity.this, MainActivity.class));
             finish();
         }
 

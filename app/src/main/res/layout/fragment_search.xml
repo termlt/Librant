@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".fragments.SearchFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layoutSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp">
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/background_color">
 
         <com.google.android.material.search.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#ECEAEA"
+            android:backgroundTint="@color/search_background"
             android:hint="Search..."/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -26,7 +28,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search for books"
-        app:layout_anchor="@+id/search_bar"/>
+        app:layout_anchor="@+id/search_bar">
+
+        <TextView
+            android:id="@+id/search_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Hit the search button once done!"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/_15ssp" />
+
+    </com.google.android.material.search.SearchView>
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -88,8 +103,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:padding="@dimen/_16sdp"
+                    android:gravity="center"
                     android:text=" We searched everywhere, but couldn't find anything."
-                    android:ems="10"
                     android:textColor="@color/main_text_color"
                     android:fontFamily="@font/open_sans_semibold"
                     android:textSize="@dimen/_15ssp"

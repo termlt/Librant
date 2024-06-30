@@ -33,7 +33,6 @@ import com.librant.R;
 import com.librant.activities.BookDetailsActivity;
 import com.librant.activities.EditBookActivity;
 import com.librant.activities.EditProfileActivity;
-import com.librant.activities.auth.LoginActivity;
 import com.librant.activities.auth.MainActivity;
 import com.librant.adapters.BookAdapter;
 import com.librant.databinding.FragmentProfileBinding;
@@ -50,7 +49,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private BookAdapter bookAdapter;
     private final String[] options = {"My Books", "Recently Viewed"};
-    private TextView userNameTextView, contactInfoTextView;
+    private TextView userNameTextView, contactInfoTextView, editBookTextView;
     private ImageView editProfileButton, logoutButton;
     private ProfileViewModel viewModel;
     private RecyclerView bookRecyclerView;
@@ -78,7 +77,7 @@ public class ProfileFragment extends Fragment {
         updateUserInfo(userNameTextView, contactInfoTextView);
 
         if (user == null) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), MainActivity.class));
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -103,6 +102,7 @@ public class ProfileFragment extends Fragment {
                     viewModel.fetchUserBooks();
                     attachItemTouchHelper();
                 } else {
+                    editBookTextView.setVisibility(View.GONE);
                     viewModel.getRecentlyViewedBooks().observe(getViewLifecycleOwner(), books -> {
                         bookAdapter.setBooks(books);
                         bookAdapter.notifyDataSetChanged();
@@ -129,9 +129,16 @@ public class ProfileFragment extends Fragment {
     private void toggleNoBooksLayout(boolean show) {
         if (show) {
             noSavedBooksLayout.setVisibility(View.VISIBLE);
+            editBookTextView.setVisibility(View.GONE);
             bookRecyclerView.setVisibility(View.GONE);
         } else {
             noSavedBooksLayout.setVisibility(View.GONE);
+
+            if (tabLayout.getSelectedTabPosition() == 0) {
+                editBookTextView.setVisibility(View.VISIBLE);
+            } else {
+                editBookTextView.setVisibility(View.GONE);
+            }
             bookRecyclerView.setVisibility(View.VISIBLE);
         }
     }
@@ -139,6 +146,7 @@ public class ProfileFragment extends Fragment {
     private void bindViews() {
         userNameTextView = binding.userNameTextView;
         contactInfoTextView = binding.contactInfoTextView;
+        editBookTextView = binding.editTextView;
         bookRecyclerView = binding.bookRecyclerView;
         viewPager = binding.viewPager;
         tabLayout = binding.optionsLayout;
@@ -238,7 +246,7 @@ public class ProfileFragment extends Fragment {
                 .show();
 
         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.DKGRAY);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
     }
 
     private void showLogoutConfirmationDialog() {
@@ -266,7 +274,11 @@ public class ProfileFragment extends Fragment {
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        username.setText(documentSnapshot.getString("name") + " " + documentSnapshot.getString("surname"));
+                        if (!documentSnapshot.getString("name").isEmpty() || !documentSnapshot.getString("surname").isEmpty()) {
+                            username.setText(documentSnapshot.getString("name") + " " + documentSnapshot.getString("surname"));
+                        } else {
+                            username.setText("Anonymous");
+                        }
                         String address = documentSnapshot.getString("address");
                         String phoneNumber = documentSnapshot.getString("phoneNumber");
                         if (address != null && !address.isEmpty()) {

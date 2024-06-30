@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +48,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
-    private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private BookAdapter bookAdapter;
@@ -62,6 +65,9 @@ public class HomeFragment extends Fragment {
     private BookCollection bookCollection;
     private ExecutorService executorService;
     private Handler mainHandler;
+    private boolean isAdmin = false;
+    private RecyclerView pendingBooksRecyclerView;
+    private BookAdapter latestBooksAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -84,9 +90,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupViews() {
-        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        user = mAuth.getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         userCollection = new UserCollection();
         bookCollection = new BookCollection();
         swipeRefreshLayout = binding.swipeRefreshLayout;
@@ -98,13 +103,7 @@ public class HomeFragment extends Fragment {
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
 
-        userCollection.getUserById(user.getUid(), receivedUser -> {
-            if (receivedUser.getAddress() != null) {
-                addBookButton.setVisibility(View.VISIBLE);
-            } else {
-                addBookButton.setVisibility(View.GONE);
-            }
-        });
+        checkUserContacts();
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (tabPosition == 0) fetchLatestBooks();
@@ -119,18 +118,29 @@ public class HomeFragment extends Fragment {
         checkIfAdmin();
     }
 
-    private void checkIfAdmin() {
-        String currentUserId = user.getUid();
+    private void checkUserContacts() {
+        userCollection.getUserById(user.getUid(), receivedUser -> {
+            if (receivedUser != null && !receivedUser.getAddress().isEmpty() ||
+                    receivedUser != null && !receivedUser.getPhoneNumber().isEmpty()) {
+                addBookButton.setVisibility(View.VISIBLE);
+            } else {
+                addBookButton.setVisibility(View.GONE);
+            }
+        });
+    }
 
-        db.collection("users").document(currentUserId).get()
+    private void checkIfAdmin() {
+        db.collection("users").document(user.getUid()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
                             Boolean isAdmin = document.getBoolean("isAdmin");
                             if (isAdmin != null && isAdmin) {
+                                this.isAdmin = true;
                                 setupDrawerLayout();
                                 notificationsButton.setVisibility(View.VISIBLE);
+                                setNotificationsBadge();
                             } else {
                                 notificationsButton.setVisibility(View.GONE);
                             }
@@ -141,6 +151,23 @@ public class HomeFragment extends Fragment {
                         notificationsButton.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void setNotificationsBadge() {
+        bookCollection.getPendingBooksCount(new BookCollection.OnPendingBooksCountListener() {
+            @OptIn(markerClass = ExperimentalBadgeUtils.class)
+            @Override
+            public void onCountLoaded(int count) {
+                BadgeDrawable badgeDrawable = BadgeDrawable.create(requireContext());
+                badgeDrawable.setNumber(count);
+                badgeDrawable.setVisible(count > 0);
+
+                BadgeUtils.attachBadgeDrawable(badgeDrawable, notificationsButton, null);
+            }
+
+            @Override
+            public void onFailure(Exception e) {}
+        });
     }
 
     private void initializeTabs() {
@@ -197,9 +224,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void checkUserDetails() {
-        String currentUserId = user.getUid();
-
-        db.collection("users").document(currentUserId).get()
+        db.collection("users").document(user.getUid()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
@@ -224,6 +249,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupDrawerLayout() {
+        pendingBooksRecyclerView = binding.drawerLayout.findViewById(R.id.latestBooksRecyclerView);
+        latestBooksAdapter = new BookAdapter(new ArrayList<>());
+        pendingBooksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        pendingBooksRecyclerView.setAdapter(latestBooksAdapter);
+
         notificationsButton.setOnClickListener(v -> {
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -295,11 +325,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadPendingBooks() {
-        RecyclerView booksRecyclerView = binding.drawerLayout.findViewById(R.id.booksRecyclerView);
-        BookAdapter latestBooksAdapter = new BookAdapter(new ArrayList<>());
-        booksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        booksRecyclerView.setAdapter(latestBooksAdapter);
-
         latestBooksAdapter.setOnItemClickListener(book -> {
             Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
             intent.putExtra("book", (Parcelable) book);
@@ -325,12 +350,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (tabPosition == 0) {
-            fetchLatestBooks();
-        } else {
-            String selectedGenre = genres[tabPosition];
-            fetchBooksByGenre(selectedGenre);
+
+        checkUserContacts();
+
+        if (!(tabPosition == 0)) {
+            fetchBooksByGenre(genres[tabPosition]);
         }
+
+        if (isAdmin) setNotificationsBadge();
     }
 
     @Override

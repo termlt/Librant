@@ -3,6 +3,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="signup_title">Sign up</string>
+    <string name="signup_subtitle">Choose how you\'d like to create your Librant account</string>
+    <string name="signup_with_apple">Sign up with Apple</string>
+    <string name="signup_with_google">Sign up with Google</string>
+    <string name="signup_with_email">Email and Password</string>
+    <string name="already_have_account">I already have an account</string>
+    <string name="terms_and_privacy">By using this app you agree with our Terms of Use and Privacy Policy.</string>
+    <string name="back_button">Back</string>
+
     <string-array name="age_limits">
         <item>6+</item>
         <item>12+</item>
@@ -15,4 +24,12 @@
         <item>Unavailable</item>
         <item>Hidden</item>
     </string-array>
+
+
+    <string name="login_title">Login</string>
+    <string name="login_subtitle">Sign in to your account</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_email">Login with Email</string>
+    <string name="dont_have_account">I don\'t have an account</string>
+
 </resources>

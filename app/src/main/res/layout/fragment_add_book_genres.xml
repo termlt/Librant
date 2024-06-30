@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -14,25 +15,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:padding="@dimen/_16sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/back_button"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:background="@drawable/arrow_left_black" />
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/arrow_left_black"
+                    android:contentDescription="@string/back_button"
+                    app:tint="@color/buttons_color" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/toolbarProgress"
-                    android:layout_width="@dimen/_150sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
                     android:layout_gravity="center"
                     android:indeterminate="true"
                     app:trackThickness="@dimen/_11sdp"
@@ -40,208 +46,198 @@
                     app:indicatorColor="#3CCD2C"
                     app:trackCornerRadius="@dimen/_8sdp"/>
 
-            </com.google.android.material.appbar.MaterialToolbar>
+            </androidx.appcompat.widget.Toolbar>
 
-            <TextView
-                android:id="@+id/addGenresText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:text="Add your book genre/s"
-                android:textSize="@dimen/_20ssp"
-                android:fontFamily="@font/source_sans_pro_bold"
-                android:textColor="@color/main_text_color"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/addGenresDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:text="Let us know its characteristics."
-                android:textSize="@dimen/_13ssp"
-                android:fontFamily="@font/open_sans_semibold"
-                android:textColor="@color/gray"
-                app:layout_constraintTop_toBottomOf="@id/addGenresText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/genresText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:fontFamily="@font/lato_bold"
-                android:text="Genres"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addGenresDescription" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:chipSpacing="8dp"
-                app:singleSelection="false"
-                app:layout_constraintTop_toBottomOf="@id/genresText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreAdventure"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Adventure"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreDetective"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Detective"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreFiction"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fiction"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenrePsychology"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Psychology"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenrePhilosophy"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Philosophy"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreRomance"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Romance"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreHorror"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Horror"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreMystery"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mystery"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreSciFi"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sci-Fi"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGenreOther"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Other"
-                    android:textSize="@dimen/_13sdp"
-                    android:textColor="@color/light_green"
-                    app:chipBackgroundColor="#E8ECE8"
-                    app:checkedIconTint="@color/light_green"
-                    app:rippleColor="#6857B633"
-                    app:chipCornerRadius="@dimen/_10sdp"/>
-
-            </com.google.android.material.chip.ChipGroup>
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/continueButton"
-                style="?attr/materialButtonStyle"
-                android:layout_width="@dimen/_270sdp"
-                android:layout_height="@dimen/_55sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:fontFamily="@font/ubuntu_regular"
-                android:hint="Continue"
-                android:textColorHint="@color/white"
-                android:textSize="@dimen/_13ssp"
-                android:clickable="false"
-                app:cornerRadius="@dimen/_25sdp"
-                app:backgroundTint="@color/button_gray"
-                app:layout_constraintTop_toBottomOf="@id/chipGroup"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/_16sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <TextView
+                    android:id="@+id/addGenresText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Add your book genres"
+                    android:textSize="@dimen/_20ssp"
+                    android:fontFamily="@font/source_sans_pro_bold"
+                    android:textColor="@color/main_text_color" />
+
+                <TextView
+                    android:id="@+id/addGenresDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Let us know its characteristics."
+                    android:textSize="@dimen/_13ssp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:textColor="@color/light_gray" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    app:chipSpacing="8dp"
+                    app:singleSelection="false">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreAdventure"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adventure"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreDetective"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Detective"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreFiction"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fiction"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenrePsychology"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Psychology"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenrePhilosophy"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Philosophy"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreRomance"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Romance"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreHorror"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Horror"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreMystery"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mystery"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreSciFi"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sci-Fi"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGenreOther"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Other"
+                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/light_green"
+                        app:chipBackgroundColor="#E8ECE8"
+                        app:checkedIconTint="@color/light_green"
+                        app:rippleColor="#6857B633"
+                        app:chipCornerRadius="@dimen/_10sdp"/>
+
+                </com.google.android.material.chip.ChipGroup>
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/continueButton"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_55sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:hint="Continue"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    android:clickable="false"
+                    app:cornerRadius="@dimen/_25sdp"
+                    app:backgroundTint="@color/button_gray" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

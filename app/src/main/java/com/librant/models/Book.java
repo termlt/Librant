@@ -3,6 +3,8 @@ package com.librant.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +27,7 @@ public class Book implements Serializable, Parcelable {
     private List<String> borrowers;
     private String borrowerName;
     private String borrowerSurname;
+    private transient DocumentSnapshot documentSnapshot;
 
     public Book() {}
 
@@ -83,7 +86,6 @@ public class Book implements Serializable, Parcelable {
         }
     };
 
-    // Getter and Setter methods for borrowerName and borrowerSurname
     public String getBorrowerName() {
         return borrowerName;
     }
@@ -99,8 +101,6 @@ public class Book implements Serializable, Parcelable {
     public void setBorrowerSurname(String borrowerSurname) {
         this.borrowerSurname = borrowerSurname;
     }
-
-    // Other existing getter and setter methods
 
     public String getBookId() {
         return bookId;
@@ -220,6 +220,14 @@ public class Book implements Serializable, Parcelable {
 
     public void setBorrowers(List<String> borrowers) {
         this.borrowers = borrowers;
+    }
+
+    public DocumentSnapshot getDocumentSnapshot() {
+        return documentSnapshot;
+    }
+
+    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+        this.documentSnapshot = documentSnapshot;
     }
 
     @Override

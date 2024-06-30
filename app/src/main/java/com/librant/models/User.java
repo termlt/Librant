@@ -1,13 +1,39 @@
 package com.librant.models;
 
+import com.google.firebase.firestore.PropertyName;
+
 import java.util.List;
 
 public class User {
-    private String id, name, surname, phoneNumber, address;
+    @PropertyName("id")
+    private String id;
+
+    @PropertyName("name")
+    private String name;
+
+    @PropertyName("surname")
+    private String surname;
+
+    @PropertyName("phoneNumber")
+    private String phoneNumber;
+
+    @PropertyName("address")
+    private String address;
+
+    @PropertyName("savedBooks")
     private List<String> savedBooks;
+
+    @PropertyName("viewedBooks")
     private List<String> viewedBooks;
+
+    @PropertyName("phoneNumberVisible")
     private boolean phoneNumberVisible;
+
+    @PropertyName("addressVisible")
     private boolean addressVisible;
+
+    @PropertyName("isAdmin")
+    private boolean isAdmin;
 
     public User() {
     }
@@ -82,5 +108,13 @@ public class User {
 
     public void setAddressVisible(boolean addressVisible) {
         this.addressVisible = addressVisible;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

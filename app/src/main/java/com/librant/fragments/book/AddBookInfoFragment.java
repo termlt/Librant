@@ -1,13 +1,12 @@
 package com.librant.fragments.book;
 
-import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -17,16 +16,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.librant.R;
+import com.librant.activities.HomeActivity;
 import com.librant.models.Book;
 
 public class AddBookInfoFragment extends Fragment {
     private TextInputEditText editTextLanguage;
     private TextInputEditText editTextPageCount;
     private Spinner spinnerAgeLimit;
-    private MaterialButton saveButton;
+    private MaterialButton continueButton;
     private Book book;
 
     private boolean isLanguageFilled = false;
@@ -41,14 +40,22 @@ public class AddBookInfoFragment extends Fragment {
             book = (Book) getArguments().getSerializable("book");
         }
 
-        LinearProgressIndicator progressIndicator = root.findViewById(R.id.toolbarProgress);
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressIndicator, "progress", 15, 30);
-        progressAnimator.setDuration(400);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.start();
+        root.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack();
+                } else {
+                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
+            }
+        });
 
-        saveButton = root.findViewById(R.id.saveButton);
-        saveButton.setEnabled(false);
+        continueButton = root.findViewById(R.id.continueButton);
+        continueButton.setEnabled(false);
 
         editTextLanguage = root.findViewById(R.id.editTextLanguage);
         editTextPageCount = root.findViewById(R.id.editTextPageCount);
@@ -90,7 +97,7 @@ public class AddBookInfoFragment extends Fragment {
         editTextLanguage.addTextChangedListener(textWatcher);
         editTextPageCount.addTextChangedListener(textWatcher);
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isLanguageFilled && isPageCountFilled && isAgeLimitSelected) {
@@ -117,7 +124,7 @@ public class AddBookInfoFragment extends Fragment {
 
     private void checkAllFields() {
         boolean allFieldsFilled = isLanguageFilled && isPageCountFilled && isAgeLimitSelected;
-        saveButton.setEnabled(allFieldsFilled);
-        saveButton.setBackgroundColor(getResources().getColor(allFieldsFilled ? R.color.light_green : R.color.button_gray));
+        continueButton.setEnabled(allFieldsFilled);
+        continueButton.setBackgroundColor(getResources().getColor(allFieldsFilled ? R.color.light_green : R.color.button_gray));
     }
 }
